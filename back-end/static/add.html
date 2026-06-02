@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Добавление данных</title>
+<link rel="stylesheet" href="/static/css/add.css">
+<script defer src="/static/js/add.js"></script>
+</head>
+<body>
+
+<h2 class="sr-only">Админ-панель: добавление проекта в базу данных</h2>
+
+<div class="panel">
+  <div class="panel-header">
+    <p class="panel-title">Админ-панель</p>
+    <p class="panel-subtitle">Добавление проекта</p>
+  </div>
+
+  <div class="section-label">Основное</div>
+
+  <div class="form-group">
+    <label class="form-label" for="title">Название проекта</label>
+    <input class="form-input" type="text" id="title" name="title" placeholder="Например: Inception">
+  </div>
+
+  <div class="form-group">
+    <label class="form-label" for="description">Описание</label>
+    <textarea class="form-textarea" id="description" name="description" placeholder="Краткое описание проекта..."></textarea>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">Это сериал?</label>
+    <div class="toggle-group">
+      <button class="toggle-btn" id="yes-btn" type="button" onclick="toggle('yes')">Да</button>
+      <button class="toggle-btn" id="no-btn" type="button" onclick="toggle('no')">Нет</button>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <div class="section-label">Медиафайлы</div>
+
+  <div class="form-group">
+    <label class="form-label" for="trailer">Путь к трейлеру</label>
+    <input class="form-input" type="text" id="trailer" name="trailer" placeholder="/media/trailers/film.mp4">
+  </div>
+
+  <div class="grid-2">
+    <div class="form-group">
+      <label class="form-label" for="poster">Путь к постеру</label>
+      <input class="form-input" type="text" id="poster" name="poster" placeholder="/media/posters/film.jpg">
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="logo">Путь к логотипу</label>
+      <input class="form-input" type="text" id="logo" name="logo" placeholder="/media/logos/film.png">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">Постер горизонтальный?</label>
+    <div class="toggle-group">
+      <button class="toggle-btn" id="h-yes-btn" type="button" onclick="toggleH('yes')">Да</button>
+      <button class="toggle-btn" id="h-no-btn" type="button" onclick="toggleH('no')">Нет</button>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn-primary" type="button" onclick="send()">Отправить данные</button>
+    <button class="btn-secondary" type="button" onclick="exit()">Выйти</button>
+  </div>
+</div>
+
+<div class="toast" id="toast">Данные отправлены</div>
+
+</body>
+</html>

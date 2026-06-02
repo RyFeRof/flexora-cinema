@@ -1,0 +1,5 @@
+INSERT INTO Films(title,isSerial,description) VALUES('Атака титанов',true,'Люди сражаются с титанами, которые мечтают их съесть. Финал самого эпичного аниме современности'),('Дандадан',true,'Внучка медиума и юный уфолог внезапно встречают призраков и пришельцев. Хитовое аниме — безумное и смешное'),('Железный человек',false,'Он не просто металл — он живой! Идём в кино на высокотехнологичную легенду, соединяющую поколения.');
+INSERT INTO trailers(path) VALUES('/static/assets/main-cinema/Attack on Titan Season 1 Trailer [LV-nazLVmgo].f248.webm'),('/static/assets/main-cinema/dandadan.mp4');
+INSERT INTO FilmCards(filmId,path,is_horizontal) VALUES(1,'//avatars.mds.yandex.net/get-ott/212840/2a00000186a8b7a1951185c6175ed0f07fd0/2016x1134',true),(2,'//avatars.mds.yandex.net/get-ott/1652588/2a000001981bf0c61fd778cd9bc97146001c/2016x1134',true);
+INSERT INTO Logos(path) VALUES('//avatars.mds.yandex.net/get-ott/1531675/2a0000018e7eebec99e598e322d5f2ebc8cb/960x540'),('//avatars.mds.yandex.net/get-ott/2419418/2a00000199baba1d2b377a01006f01546779/960x540');
+INSERT INTO FilmLogos(logoId,filmId) VALUES(1,1),(2,2);

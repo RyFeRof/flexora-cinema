@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Приговорённый быть героем</title>
+<link rel="stylesheet" href="/static/css/playerStyle.css">
+<script src="/static/js/player.js" defer></script>
+</head>
+<body>
+<div class="player" id="player">
+<video id="video"  playsinline autoplay>
+</video>
+<a href="/cinema" id="exitBtn">&times;</a>
+<span id="ageRating" class="hidden" >18+</span>
+<img id="film_logo" class="film_logo">
+<div class="btns" id="btns">
+<a href="#" id="Watch" class="univ_btn" >Смотреть заставку</a>
+<a href="#" id="universalBtn" class="univ_btn">Пропустить</a>
+</div>
+<div class="controls" id="controls">
+<div id="seek_container">
+<input type="range" class="range" id="seek" min="0" value="0" max="1" step="0.01">
+<span id="time">—0:00</span>
+</div>
+<div id="other_contain">
+<div id="left_side">
+<a href="#"  id="playBtn">
+<div class="btn_ico" id="playBtnIco" style="--icon-path:url('/static/assets/player_images/play.svg')"></div>
+</a>
+<a href="#" id="nextEpisode">
+<div class="btn_ico" style="--icon-path: url('/static/assets/player_images/next.svg')"></div>
+</a>
+<a href="#" id="backArrow" class="arrow_btn">
+<div class="btn_ico" style="--icon-path:url('/static/assets/player_images/backArrow.svg')"></div>
+<span class="arrowSpan">10</span>
+</a>
+<a href="#" id="forwardArrow" class="arrow_btn">
+<div class="btn_ico" style="--icon-path:url('/static/assets/player_images/forwardArrow.svg')"></div>
+<span class="arrowSpan" style="left: 14px;">10</span>
+</a>
+<div id="innerVolBtn">
+<a href="#" id="volumeBtn">
+<div class="btn_ico"  style="--icon-path: url('/static/assets/player_images/dinamic.svg')"></div>
+</a>
+<input type="range" id="volumeSeek" min="0" max="100" value="0" step="1" class="hidden">
+</div>
+</div>
+<div id="right_side">
+<a href="#" id="sizeChangeBtn">
+<div class="help_toggle_btn_div">
+<div class="btn_toggle_ico" id="toggle-btn-up-arrow"></div>
+</div>
+<div class="help_toggle_btn_div" style="flex-direction: row;">
+<div class="btn_toggle_ico" id="toggle-btn-down-arrow" style="transform: rotate(180deg);"></div>
+</div>   
+</a>
+</div>
+</div>    
+</div>
+</div>
+</body>
+</html>

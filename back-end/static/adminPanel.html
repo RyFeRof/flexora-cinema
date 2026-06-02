@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Админская панель</title>
+<link rel="stylesheet" href="/static/css/admin.css">
+<script defer src="/static/js/admin.js"></script>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="top">
+    <div>
+      <p class="top-title">Проекты</p>
+      <p class="top-sub">База данных</p>
+    </div>
+    <button class="add-btn" onclick="window.location.href='/add'">+ Добавить</button>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Название</th>
+          <th>Сериал</th>
+          <th>Описание</th>
+          <th>Трейлер</th>
+          <th>Постер</th>
+          <th>Горизонт.</th>
+          <th>Логотип</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="tbody">
+        <!-- JS вставляет строки сюда -->
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</body>
+</html>
