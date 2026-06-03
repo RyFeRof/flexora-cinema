@@ -2,7 +2,7 @@ import axios from "axios";
 import type { Film, Release } from "../types"
 
 const api = axios.create({
-    baseURL: 'http://localhost:8080'
+    baseURL: ''
 })
 
 export const getFilms = async (): Promise<Film[]> => {
