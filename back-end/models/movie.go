@@ -28,7 +28,7 @@ type Film struct {
 }
 type Release struct {
 	Id           *int    `json:"id"`
-	FilmdId      *int    `json:"filmd_id"`
+	FilmId       *int    `json:"film_id"`
 	NumSeria     *int    `json:"number_seria"`
 	Title        *string `json:"title"`
 	NumberSeason *int    `json:"number_season"`
