@@ -28,6 +28,7 @@ func GetFilms(w http.ResponseWriter, r *http.Request) {
 	`)
 	if err != nil {
 		rows.Close()
+		http.Error(w, err.Error(), 500)
 		return
 	}
 	defer rows.Close()
