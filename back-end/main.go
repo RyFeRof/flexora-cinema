@@ -2,6 +2,7 @@ package main
 
 import (
 	"fullstack/db"
+	"fullstack/middleware"
 	"fullstack/route"
 	"log"
 	"net/http"
@@ -12,7 +13,7 @@ import (
 func main() {
 	godotenv.Load()
 	db.Init()
-	route.SetupRouter()
+	mux := route.SetupRouter()
 	log.Println("Сервер запущен на :8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":8080", middleware.CorsMiddleware(mux)))
 }
