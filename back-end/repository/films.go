@@ -5,7 +5,7 @@ import (
 	"fullstack/models"
 )
 
-func GetFilms() ([]models.Film, error) {
+func GetFilms(limit int, offset int) ([]models.Film, error) {
 	rows, err := db.DB.Query(`
 	SELECT f.id,
 	f.title,
@@ -22,10 +22,12 @@ func GetFilms() ([]models.Film, error) {
 	LEFT JOIN trailers 	t 	on t.id=f.trailerId
 	LEFT JOIN filmCards fc 	on fc.filmId=f.id
 	LEFT JOIN FilmLogos fl 	on fl.filmId=f.id
-	LEFT JOIN Logos 	l 	on l.id=fl.logoId;
-	`)
+	LEFT JOIN Logos 	l 	on l.id=fl.logoId
+	WHERE f.id > $1
+	ORDER BY f.id
+	LIMIT $2;
+	`, offset, limit)
 	if err != nil {
-		rows.Close()
 		return nil, err
 	}
 	defer rows.Close()

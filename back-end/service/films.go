@@ -5,6 +5,6 @@ import (
 	"fullstack/repository"
 )
 
-func GetFilms() ([]models.Film, error) {
-	return repository.GetFilms()
+func GetFilms(limit int, offset int) ([]models.Film, error) {
+	return repository.GetFilms(limit, offset)
 }
