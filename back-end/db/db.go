@@ -46,7 +46,7 @@ func migrate() {
 			title TEXT NOT NULL,
 			isSerial BOOLEAN NOT NULL DEFAULT false,
 			description TEXT,
-			trailerId INT REFERENCES Trailers(id)
+			trailerId INT REFERENCES Trailers(id) UNIQUE
 		);`,
 
 		`CREATE TABLE IF NOT EXISTS FilmCards(
@@ -72,7 +72,8 @@ func migrate() {
 		`CREATE TABLE IF NOT EXISTS FilmCountries(
 			id SERIAL PRIMARY KEY,
 			filmId INT REFERENCES Films(id),
-			countryId INT REFERENCES Countries(id)
+			countryId INT REFERENCES Countries(id),
+			UNIQUE (filmId, countryId)
 		);
 		`,
 		`CREATE TABLE IF NOT EXISTS Genres(
@@ -82,7 +83,8 @@ func migrate() {
 		`CREATE TABLE IF NOT EXISTS FilmGenres(
 			id SERIAL PRIMARY KEY,
 			filmId INT REFERENCES Films(id),
-			genreId INT REFERENCES Genres(id)
+			genreId INT REFERENCES Genres(id),
+			UNIQUE (filmId, genreId)
 		);`,
 		`CREATE TABLE IF NOT EXISTS FilmingMembers(
 			id SERIAL PRIMARY KEY,
@@ -96,7 +98,8 @@ func migrate() {
 			id SERIAL PRIMARY KEY,
 			filmId INT REFERENCES Films(id),
 			memberId INT REFERENCES FilmingMembers(id),
-			roleId INT REFERENCES Roles(id)
+			roleId INT REFERENCES Roles(id),
+			UNIQUE (filmId, memberId,roleId)
 		);`,
 		`CREATE TABLE IF NOT EXISTS Materials(
 			id SERIAL PRIMARY KEY,
@@ -120,7 +123,50 @@ func migrate() {
 			timeIntro text,
 			timeOutro text,
 			timeIntroEnd text,
-			timeOutroEnd text
+			timeOutroEnd text,
+			UNIQUE (filmId, seasonId,materialId)
+		);`,
+		`CREATE TABLE IF NOT EXISTS Users(
+			id SERIAL PRIMARY KEY,
+			login TEXT NOT NULL UNIQUE,
+			name TEXT NOT NULL,
+			password TEXT NOT NULL,
+			mail TEXT NOT NULL,
+			phoneNumber TEXT NOT NULL UNIQUE,
+			createdAt DATE NOT NULL DEFAULT NOW()
+		);`,
+		`CREATE TABLE IF NOT EXISTS WatchHistories(
+			id SERIAL PRIMARY KEY,
+			userId INT REFERENCES Users(id) ON DELETE CASCADE,
+			filmId INT REFERENCES Films(id) ON DELETE CASCADE,
+			timeWatch TEXT NOT NULL,
+			dateWatch date not null default now(),
+			UNIQUE (userId,filmId)
+		);`,
+		`CREATE TABLE IF NOT EXISTS Subscriptions(
+			id SERIAL PRIMARY KEY,
+			title TEXT NOT NULL UNIQUE,
+			countMembers INT NOT NULL,
+			validityTime INT NOT NULL 
+		);`, //validityTime - в днях
+		`CREATE TABLE IF NOT EXISTS Groups(
+			id SERIAL PRIMARY KEY,
+			subId INT REFERENCES Subscriptions(id),
+			dateEnd date not null
+		);`,
+		`CREATE TABLE IF NOT EXISTS GroupUsers(
+			id SERIAL PRIMARY KEY,
+			groupId INT REFERENCES Groups(id),
+			userId INT REFERENCES Users(id),
+			isOwner BOOLEAN DEFAULT FALSE,
+			UNIQUE (groupId,userId)
+		);`,
+		`CREATE TABLE IF NOT EXISTS Feedback(
+			id SERIAL PRIMARY KEY,
+			Valuation INT NOT NULL CHECK (Valuation>0 AND Valuation<=10),
+			text TEXT NOT NULL,
+			userId INT REFERENCES Users(id) ON DELETE SET NULL,
+			releaseId INT REFERENCES Releases(id) ON DELETE CASCADE
 		);`,
 	}
 	for _, query := range queries {
