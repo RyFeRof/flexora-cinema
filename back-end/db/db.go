@@ -104,13 +104,13 @@ func migrate() {
 		`CREATE TABLE IF NOT EXISTS Materials(
 			id SERIAL PRIMARY KEY,
 			path TEXT NOT NULL,
-			length int not null
+			durationSeconds int not null
 		);`,
 		`CREATE TABLE IF NOT EXISTS Seasons(
 			id SERIAL PRIMARY KEY,
 			filmId INT REFERENCES Films(id),
 			cardId INT REFERENCES FilmCards(id),
-			numberSeason TEXT NOT NULL
+			numberSeason INT NOT NULL
 		);`,
 		`CREATE TABLE IF NOT EXISTS Releases(
 			id SERIAL PRIMARY KEY,
@@ -168,6 +168,20 @@ func migrate() {
 			userId INT REFERENCES Users(id) ON DELETE SET NULL,
 			releaseId INT REFERENCES Releases(id) ON DELETE CASCADE
 		);`,
+		`CREATE INDEX IF NOT EXISTS idx_filmgenres_filmid ON FilmGenres(filmId);`,
+		`CREATE INDEX IF NOT EXISTS idx_filmgenres_genreid ON FilmGenres(genreId);`,
+		`CREATE INDEX IF NOT EXISTS idx_filmcountries_filmid ON FilmCountries(filmId);`,
+		`CREATE INDEX IF NOT EXISTS idx_filmlogos_filmid ON FilmLogos(filmId);`,
+		`CREATE INDEX IF NOT EXISTS idx_filmcards_filmid ON FilmCards(filmId);`,
+		`CREATE INDEX IF NOT EXISTS idx_releases_filmid ON Releases(filmId);`,
+		`CREATE INDEX IF NOT EXISTS idx_releases_seasonid ON Releases(seasonId);`,
+		`CREATE INDEX IF NOT EXISTS idx_watchhistories_userid ON WatchHistories(userId);`,
+		`CREATE INDEX IF NOT EXISTS idx_watchhistories_filmid ON WatchHistories(filmId);`,
+		`CREATE INDEX IF NOT EXISTS idx_groupusers_userid ON GroupUsers(userId);`,
+		`CREATE INDEX IF NOT EXISTS idx_groupusers_groupid ON GroupUsers(groupId);`,
+		`CREATE INDEX IF NOT EXISTS idx_feedback_userid ON Feedback(userId);`,
+		`CREATE INDEX IF NOT EXISTS idx_feedback_releaseid ON Feedback(releaseId);`,
+		`CREATE INDEX IF NOT EXISTS idx_seasons_filmid ON Seasons(filmId);`,
 	}
 	for _, query := range queries {
 		_, err := DB.Exec(query)

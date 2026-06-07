@@ -11,7 +11,7 @@ func GetRelease(id int, season int, seria int) (models.Release, error) {
             f.id,
             r.number_seria,
             r.name,
-            s.numberSeason,
+            COALESCE(s.numberSeason, 0),
 			m.path,
             l.path,
             COALESCE(r.timeIntro,''),
@@ -24,7 +24,7 @@ func GetRelease(id int, season int, seria int) (models.Release, error) {
         LEFT JOIN Logos l on l.id=fl.logoId
         LEFT JOIN Seasons s on r.seasonId=s.id
         LEFT JOIN Materials m on m.id=r.materialId
-        WHERE r.filmid = $1 AND r.number_seria=$2 AND s.numberSeason=$3;
+        WHERE r.filmid = $1 AND r.number_seria=$2 AND (s.numberSeason=$3 OR r.seasonId IS NULL);
     `, id, seria, season)
 
 	var r models.Release
