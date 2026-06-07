@@ -7,6 +7,7 @@ import (
 	"strconv"
 )
 
+// ПОПРАВИТЬ СЕЗОНЫ, ПОКА ЧТО В ССЫЛКЕ ОНИ ОБЯЗАТЕЛЬНЫ!!!!
 func GetRelease(w http.ResponseWriter, r *http.Request) {
 	idStr := r.URL.Query().Get("id")
 	numStr := r.URL.Query().Get("seria")
