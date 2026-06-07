@@ -5,7 +5,7 @@ import (
 	"fullstack/models"
 )
 
-func GetFilms(limit int, offset int) ([]models.Film, error) {
+func GetFilms(limit int, lastId int) ([]models.Film, error) {
 	rows, err := db.DB.Query(`
 	SELECT f.id,
 	f.title,
@@ -26,7 +26,7 @@ func GetFilms(limit int, offset int) ([]models.Film, error) {
 	WHERE f.id > $1
 	ORDER BY f.id
 	LIMIT $2;
-	`, offset, limit)
+	`, lastId, limit)
 	if err != nil {
 		return nil, err
 	}

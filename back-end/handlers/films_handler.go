@@ -9,20 +9,20 @@ import (
 
 func GetFilms(w http.ResponseWriter, r *http.Request) {
 	limitStr := r.URL.Query().Get("limit")
-	offsetStr := r.URL.Query().Get("offset")
+	lastIdStr := r.URL.Query().Get("last_id")
 	limit, err := strconv.Atoi(limitStr)
 	if err != nil {
 		http.Error(w, "invalid limit", 400)
 		return
 	}
-	offset, err := strconv.Atoi(offsetStr)
+	lastId, err := strconv.Atoi(lastIdStr)
 	if err != nil {
-		http.Error(w, "invalid offset", 400)
+		http.Error(w, "invalid last_id", 400)
 		return
 	}
-	films, err := service.GetFilms(limit, offset)
+	films, err := service.GetFilms(limit, lastId)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
