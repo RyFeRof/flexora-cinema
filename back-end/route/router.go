@@ -13,5 +13,6 @@ func SetupRouter() *http.ServeMux {
 	mux.HandleFunc("/api/add", handlers.AddProject)
 	mux.HandleFunc("/api/releases", handlers.GetRelease)
 	mux.HandleFunc("/api/upload", handlers.UploadFile)
+	mux.HandleFunc("/api/register", handlers.Register)
 	return mux
 }

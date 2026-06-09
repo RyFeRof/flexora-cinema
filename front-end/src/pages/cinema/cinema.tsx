@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import type {Film} from "../../types";
+import {useEffect, useState } from "react";
+import type { Film } from "../../types";
 import { getFilms } from "../../api";
 import FilmCard from "../../components/film_card/film_card";
 
-export default function Cinema(){
+export default function Home() {
     const [films, setFilms] = useState<Film[]>([])
     const [selectedFilm, setSelectedFilm] = useState<Film | null>(null)
 
@@ -15,17 +15,19 @@ export default function Cinema(){
         } else {
             setSelectedFilm(film)
         }
-    } 
+    }
+
     return (
-        <div className="bg-black min-h-screen text-white p-8">
+        <div className=" bg-black min-h-screen text-white p-8">
             <div className="grid grid-cols-4 gap-4">
                 {films.map(film => (
-                    <FilmCard 
+                    <FilmCard
                         key={film.id}
                         film={film}
                         onClick={handleCardClick}
-                        is_selected={selectedFilm?.id === film.id}>
-                    </FilmCard>))}
+                        isSelected={selectedFilm?.id === film.id}>
+
+                </FilmCard>))}
             </div>
         </div>
     )
