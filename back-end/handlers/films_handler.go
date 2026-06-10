@@ -15,10 +15,13 @@ func GetFilms(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "invalid limit", 400)
 		return
 	}
-	lastId, err := strconv.Atoi(lastIdStr)
-	if err != nil {
-		http.Error(w, "invalid last_id", 400)
-		return
+	lastId := 0
+	if lastIdStr != "" {
+		lastId, err = strconv.Atoi(lastIdStr)
+		if err != nil {
+			http.Error(w, "Invalid last_id", http.StatusBadRequest)
+			return
+		}
 	}
 	films, err := service.GetFilms(limit, lastId)
 	if err != nil {

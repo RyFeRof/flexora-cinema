@@ -8,13 +8,15 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/google/uuid"
 )
 
 func UploadFile(fileType string, handler *multipart.FileHeader, file multipart.File) (string, error) {
 	uploadDir := fmt.Sprintf("/uploads/%s", fileType)
 	os.MkdirAll(uploadDir, os.ModePerm)
-
-	filename := filepath.Base(handler.Filename)
+	ext := filepath.Ext(handler.Filename)
+	filename := uuid.New().String() + ext
 	filename = strings.ReplaceAll(filename, " ", "_")
 	savePath := filepath.Join(uploadDir, filename)
 	dst, err := os.Create(savePath)

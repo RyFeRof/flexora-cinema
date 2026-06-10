@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"fullstack/repository"
 	"net/http"
+	"path/filepath"
 )
 
 func UploadFile(w http.ResponseWriter, r *http.Request) {
@@ -11,11 +12,15 @@ func UploadFile(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Метод не подходит", http.StatusMethodNotAllowed)
 		return
 	}
-
 	r.ParseMultipartForm(500 << 20)
 	file, handler, err := r.FormFile("file")
 	if err != nil {
 		http.Error(w, "Ошибка получения файла", http.StatusBadRequest)
+		return
+	}
+	allowed := map[string]bool{".jpg": true, ".png": true, ".mp4": true, ".webp": true}
+	if !allowed[filepath.Ext(handler.Filename)] {
+		http.Error(w, "Недопустимый тип файла", http.StatusBadRequest)
 		return
 	}
 	defer file.Close()
