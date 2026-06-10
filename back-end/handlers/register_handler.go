@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fullstack/auth"
 	"fullstack/models"
 	"fullstack/service"
 	"net/http"
@@ -17,6 +18,12 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Ошибка при получении данных", http.StatusBadRequest)
 		return
 	}
+	pas, err := auth.HashPassword(newUser.Password)
+	if err != nil {
+		http.Error(w, "Invalid password hash: "+err.Error(), http.StatusBadRequest)
+		return
+	}
+	newUser.Password = pas
 	id, err := service.Register(newUser)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
