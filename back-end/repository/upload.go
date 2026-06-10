@@ -13,7 +13,7 @@ import (
 )
 
 func UploadFile(fileType string, handler *multipart.FileHeader, file multipart.File) (string, error) {
-	uploadDir := fmt.Sprintf("/uploads/%s", fileType)
+	uploadDir := fmt.Sprintf("./uploads/%s", fileType)
 	os.MkdirAll(uploadDir, os.ModePerm)
 	ext := filepath.Ext(handler.Filename)
 	filename := uuid.New().String() + ext
