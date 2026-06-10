@@ -1,5 +1,6 @@
 import axios from "axios";
 import type { Film, Release } from "../types"
+import FilmCard from "../components/film_card/film_card";
 
 const api = axios.create({
     baseURL: ''
@@ -35,4 +36,9 @@ export const uploadFile = async (file: File, type: 'trailer' | 'card' | 'logo'):
         }
     })
     return response.data.path
+}
+
+export const createFilm = async (film: Film): Promise<{ id: number }> => {
+    const response = await api.post(`api/add`, film)
+    return response.data
 }
