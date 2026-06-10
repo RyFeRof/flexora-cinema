@@ -18,14 +18,13 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	pas, err := auth.HashPassword(inp.Password)
-	if err != nil {
-		http.Error(w, "Ошибка сервера брат", http.StatusInternalServerError)
-		return
-	}
-	u, err := service.Login(inp.Login, pas)
+	u, err := service.Login(inp.Login)
 	if err != nil {
 		http.Error(w, "Ошибка. Проверьте логин или пароль", http.StatusNotFound)
+		return
+	}
+	if !auth.CheckPassword(inp.Password, u.Password) {
+		http.Error(w, "Ошибка. Проверьте логин или пароль", http.StatusUnauthorized)
 		return
 	}
 	token, err := auth.GenerateJWT(u.Id)
