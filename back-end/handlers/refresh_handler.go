@@ -2,22 +2,25 @@ package handlers
 
 import (
 	"encoding/json"
-	"fullstack/models"
 	"fullstack/service"
 	"net/http"
 )
 
-func Login(w http.ResponseWriter, r *http.Request) {
+type refreshRequest struct {
+	RefreshToken string `json:"refresh_token"`
+}
+
+func RefreshToken(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Метод не поддерживается", http.StatusMethodNotAllowed)
 		return
 	}
-	var inp models.RegRequest
-	if err := json.NewDecoder(r.Body).Decode(&inp); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+	var ref refreshRequest
+	if err := json.NewDecoder(r.Body).Decode(&ref); err != nil {
+		http.Error(w, "Неверный формат запроса", http.StatusBadRequest)
 		return
 	}
-	tokens, err := service.Login(inp.Login, inp.Password, inp.DeviceId)
+	tokens, err := service.RefreshToken(ref.RefreshToken)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

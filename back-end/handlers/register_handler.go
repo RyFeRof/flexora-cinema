@@ -12,17 +12,24 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Метод не поддерживается", http.StatusMethodNotAllowed)
 		return
 	}
-	var newUser models.User
-	if err := json.NewDecoder(r.Body).Decode(&newUser); err != nil {
+	var reg models.RegRequest
+	if err := json.NewDecoder(r.Body).Decode(&reg); err != nil {
 		http.Error(w, "Ошибка при получении данных", http.StatusBadRequest)
 		return
 	}
-	id, err := service.Register(newUser)
+	tokens, err := service.Register(models.User{
+		Name:        reg.Name,
+		Login:       reg.Login,
+		Password:    reg.Password,
+		Mail:        reg.Mail,
+		PhoneNumber: reg.PhoneNumber,
+	}, reg.DeviceId)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(map[string]int64{"id": int64(id)})
+	json.NewEncoder(w).Encode(tokens)
 }

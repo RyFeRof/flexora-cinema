@@ -1,28 +1,34 @@
 package middleware
 
 import (
-	"fullstack/auth"
+	"fullstack/models"
 	"net/http"
+	"os"
 	"strings"
 )
 
 func AuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		authHeader := r.Header.Get("Authorization")
-		if authHeader == "" {
-			http.Error(w, "Вход в аккаунт неудачен", http.StatusUnauthorized)
+		jwtManager := models.NewManager(os.Getenv("JWT_SECRET"))
+		if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
+			http.Error(w, "unauthorized", http.StatusUnauthorized)
 			return
 		}
+
 		tokenStr := strings.TrimPrefix(authHeader, "Bearer ")
-		if tokenStr == authHeader {
-			http.Error(w, "Формат токена не валидный", http.StatusUnauthorized)
-			return
-		}
-		_, err := auth.ParseToken(tokenStr)
+
+		claims, err := jwtManager.Parse(tokenStr)
 		if err != nil {
-			http.Error(w, "Токен не валидный", http.StatusUnauthorized)
+			http.Error(w, "invalid token", http.StatusUnauthorized)
 			return
 		}
-		next(w, r)
+
+		if claims.Type != models.TokenTypeAccess {
+			http.Error(w, "wrong token type", http.StatusUnauthorized)
+			return
+		}
+		next.ServeHTTP(w, r)
+
 	}
 }
