@@ -3,10 +3,9 @@ import type { Film } from "../../types";
 interface Props {
     film: Film
     onClick: (film: Film) => void
-    is_selected: boolean
+    isSelected: boolean  // было is_selected
 }
-
-export default function FilmCard({ film, onClick, is_selected }: Props) {
+export default function FilmCard({ film, onClick, isSelected }: Props) {
     return (
         <div className="bg-black min-h-screen text-white p-8">
             <img src={film.card?.path ?? ''} 
