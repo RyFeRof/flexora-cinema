@@ -175,9 +175,9 @@ func migrate() {
 			revoked BOOLEAN DEFAULT false NOT NULL,
 			expired_time BIGINT NOT NULL
 		);`,
-		`CREATE INDEX IF NOT EXISTS idx_tokens_user   ON issued_jwt_tokens(user_id);`,
-		`CREATE INDEX IF NOT EXISTS idx_tokens_device ON issued_jwt_tokens(user_id, device_id);`,
-		`CREATE INDEX IF NOT EXISTS idx_tokens_expiry ON issued_jwt_tokens(expired_time);`,
+		`CREATE INDEX IF NOT EXISTS idx_tokens_user   ON RefreshJwtTokens(userId);`,
+		`CREATE INDEX IF NOT EXISTS idx_tokens_device ON RefreshJwtTokens(userId, deviceId);`,
+		`CREATE INDEX IF NOT EXISTS idx_tokens_expiry ON RefreshJwtTokens(expired_time);`,
 		`CREATE INDEX IF NOT EXISTS idx_filmgenres_filmid ON FilmGenres(filmId);`,
 		`CREATE INDEX IF NOT EXISTS idx_filmgenres_genreid ON FilmGenres(genreId);`,
 		`CREATE INDEX IF NOT EXISTS idx_filmcountries_filmid ON FilmCountries(filmId);`,
