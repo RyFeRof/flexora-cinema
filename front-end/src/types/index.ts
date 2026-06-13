@@ -36,3 +36,13 @@ export interface Release {
     time_intro_end: string | null
     time_outro_end: string | null
 }
+
+export interface User {
+    id: number | null
+    name: string | null
+    login: string | null
+    password: string | null
+    mail: string | null
+    phone_number: string | null
+    createdAt: Date | null
+}

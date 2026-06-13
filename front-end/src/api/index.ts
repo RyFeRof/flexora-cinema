@@ -1,6 +1,6 @@
 import axios from "axios";
-import type { Film, Release } from "../types"
-import FilmCard from "../components/film_card/film_card";
+import type { Film, Release} from "../types"
+// import FilmCard from "../components/film_card/film_card";
 
 const api = axios.create({
     baseURL: ''
@@ -30,15 +30,23 @@ export const getRelease = async (film_id: number, season: number, seria: number)
 export const uploadFile = async (file: File, type: 'trailer' | 'card' | 'logo'): Promise<string> => {
     const formData = new FormData()
     formData.append('file', file)
+
     const response = await api.post(`/api/upload?type=${type}`, formData, {
         headers: {
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'multipart/form-data',
+            Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3ODE1MzQ0MjIsInVzZXJfaWQiOjF9.fYKLIB8zI_ENeUAKMUqWI7fMq1s42877s7a3uNKm1fc'
         }
     })
+
     return response.data.path
 }
 
 export const createFilm = async (film: Film): Promise<{ id: number }> => {
-    const response = await api.post(`api/add`, film)
+    const response = await api.post('/api/add', film, {
+        headers: {
+            Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3ODE1MzQ0MjIsInVzZXJfaWQiOjF9.fYKLIB8zI_ENeUAKMUqWI7fMq1s42877s7a3uNKm1fc'
+        }
+    })
     return response.data
 }
+//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3ODE1MzQ0MjIsInVzZXJfaWQiOjF9.fYKLIB8zI_ENeUAKMUqWI7fMq1s42877s7a3uNKm1fc
