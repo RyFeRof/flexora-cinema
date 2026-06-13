@@ -67,7 +67,7 @@ func (m *Manager) GenerateRefreshToken(userId int, deviceId string) (string, err
 	return m.signedToken(TokenTypeRefresh, userId, deviceId, 7*24*time.Hour)
 }
 func (m *Manager) Parse(tokenStr string) (*Claims, error) {
-	token, err := jwt.ParseWithClaims(tokenStr, Claims{},
+	token, err := jwt.ParseWithClaims(tokenStr, &Claims{},
 		func(t *jwt.Token) (any, error) {
 			if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
 				return nil, errors.New("Неожиданный алгоритм подписи")

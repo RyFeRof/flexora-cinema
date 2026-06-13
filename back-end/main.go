@@ -5,8 +5,10 @@ import (
 	"fullstack/middleware"
 	"fullstack/repository"
 	"fullstack/route"
+	"fullstack/service"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/joho/godotenv"
@@ -15,6 +17,7 @@ import (
 func main() {
 	godotenv.Load()
 	db.Init()
+	service.InitAuth(os.Getenv("JWT_SECRET"))
 	mux := route.SetupRouter()
 	log.Println("Сервер запущен на :8080")
 	go func() {

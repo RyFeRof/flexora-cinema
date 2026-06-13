@@ -16,6 +16,10 @@ type TokenPair struct {
 
 var jwt *models.Manager
 
+func InitAuth(secret string) {
+	jwt = models.NewManager(secret)
+}
+
 func generateTokenPair(userId int, deviceId string) (*TokenPair, error) {
 	accesToken, err := jwt.GenerateAccesToken(userId, deviceId)
 	if err != nil {

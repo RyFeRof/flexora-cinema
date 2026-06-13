@@ -13,7 +13,7 @@ func SaveToken(jti, deviceId string, userId int, expiredAt time.Time) error {
 }
 func IsTokenRevoked(jti string) (bool, error) {
 	var revoked bool
-	err := db.DB.QueryRow("SELECT revoked FROMT RefreshJwtTokens WHERE jti=$1;", jti).Scan(&revoked)
+	err := db.DB.QueryRow("SELECT revoked FROM RefreshJwtTokens WHERE jti=$1;", jti).Scan(&revoked)
 	if err != nil {
 		return true, err
 	}
