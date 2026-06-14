@@ -7,7 +7,7 @@ interface Props {
 }
 export default function FilmCard({ film, onClick, isSelected }: Props) {
     return (
-        <div className="bg-black min-h-screen text-white p-8">
+        <div>
             <img src={film.card?.path ?? ''} 
                 alt={film.title ?? ''} 
                 className=" w-full h-full object-cover " />
