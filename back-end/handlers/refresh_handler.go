@@ -3,28 +3,40 @@ package handlers
 import (
 	"encoding/json"
 	"fullstack/service"
+	"log"
 	"net/http"
 )
 
-type refreshRequest struct {
-	RefreshToken string `json:"refresh_token"`
-}
-
 func RefreshToken(w http.ResponseWriter, r *http.Request) {
+	cookie, err := r.Cookie("refresh_token")
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "refresh token not found", http.StatusUnauthorized)
+		return
+	}
 	if r.Method != http.MethodPost {
+		log.Println(err)
 		http.Error(w, "Метод не поддерживается", http.StatusMethodNotAllowed)
 		return
 	}
-	var ref refreshRequest
-	if err := json.NewDecoder(r.Body).Decode(&ref); err != nil {
-		http.Error(w, "Неверный формат запроса", http.StatusBadRequest)
-		return
-	}
-	tokens, err := service.RefreshToken(ref.RefreshToken)
+	tokens, err := service.RefreshToken(cookie.Value)
 	if err != nil {
+		log.Println(err)
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
+	http.SetCookie(w, &http.Cookie{
+		Name:     "refresh_token",
+		Value:    tokens.RefreshToken,
+		HttpOnly: true,
+		Secure:   false,
+		SameSite: http.SameSiteLaxMode,
+		Path:     "/",
+		MaxAge:   7 * 24 * 3600,
+	})
+
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(tokens)
+	json.NewEncoder(w).Encode(map[string]string{
+		"access_token": tokens.AccessToken,
+	})
 }

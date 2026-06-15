@@ -22,6 +22,24 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
+	http.SetCookie(w, &http.Cookie{
+		Name:   "refresh_token",
+		Value:  "",
+		Path:   "/api/refresh",
+		MaxAge: -1, // удалить
+	})
+	http.SetCookie(w, &http.Cookie{
+		Name:     "refresh_token",
+		Value:    tokens.RefreshToken,
+		HttpOnly: true,
+		Secure:   false, // только на локалке
+		SameSite: http.SameSiteLaxMode,
+		Path:     "/",
+		MaxAge:   7 * 24 * 3600,
+	})
+
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(tokens)
+	json.NewEncoder(w).Encode(map[string]string{
+		"access_token": tokens.AccessToken,
+	})
 }

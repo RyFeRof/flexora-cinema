@@ -1,1 +1,16 @@
-@import "tailwindcss"
+@import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&display=swap');
+
+@theme {
+    --font-sans: 'Jost', sans-serif;
+
+    --color-accent: #da5bcb;
+    --color-title: #f0f0f0;
+    --color-error: #F09595;
+    --color-textColor: #898989;
+    --color-inputColor: #262626;
+    --color-cardColor: #1b1b1b;
+    --color-pageColor: #0f0f0f;
+    --color-stroke: #262626;
+}
