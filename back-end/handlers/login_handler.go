@@ -23,12 +23,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	http.SetCookie(w, &http.Cookie{
-		Name:   "refresh_token",
-		Value:  "",
-		Path:   "/api/refresh",
-		MaxAge: -1, // удалить
-	})
-	http.SetCookie(w, &http.Cookie{
 		Name:     "refresh_token",
 		Value:    tokens.RefreshToken,
 		HttpOnly: true,

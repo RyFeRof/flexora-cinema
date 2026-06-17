@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { Film, Release} from "../types"
+import type { Film, Release, User} from "../types"
 // import FilmCard from "../components/film_card/film_card";
 
 const api = axios.create({
@@ -42,7 +42,7 @@ api.interceptors.response.use((res) => res, async (error) => {
             return new Promise((resolve) => {
                 queueQueries.push((token) => {
                     originalQuery.headers.Authorization = `Bearer ${token}`
-                    resolve(originalQuery)
+                    resolve(api(originalQuery))
                 })
             })
         }
@@ -72,14 +72,19 @@ api.interceptors.response.use((res) => res, async (error) => {
 })
 
 export const login = async (login: string, password: string) => {
-    const response = await api.post('/api/login', {
-        login: login,
-        password: password,
+    const response = await axios.post('/api/login', {  // ← axios, не api
+        login,
+        password,
         device_id: getDeviceId()
-    });
+        }, { withCredentials: true })
     setAccessToken(response.data.access_token)
 }
-
+export const register = async (us: User) => {
+    const response = await axios.post('/api/register', {
+        ...us
+    }, {withCredentials: true})
+    setAccessToken(response.data.access_token)
+}
 
 export const getFilms = async (): Promise<Film[]> => {
     const response = await api.get('/api/films', {
