@@ -39,6 +39,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		MaxAge:   7 * 24 * 3600,
 	})
 
+	w.WriteHeader(http.StatusCreated)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{
 		"access_token": tokens.AccessToken,

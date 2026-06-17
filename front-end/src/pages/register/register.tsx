@@ -33,15 +33,15 @@ export default function RegisterPage({onRegister}: Props) {
     return (
         <div className="bg-pageColor w-screen h-screen justify-center items-center flex">
             <div className="flex flex-col items-center">
-                <img src={logo} className="max-w-2xs align-middle items-center my-6" />
+                <img src={logo} className="max-w-2xs align-middle items-center my-4" />
                 <div className="flex flex-col  bg-cardColor  min-w-xl border border-gray-950 p-6 rounded-3xl text-textColor text-lg font-extralight" >
                     {/**Привественный текст */}
-                    <div className="flex flex-col gap-0.5 mb-4">
+                    <div className="flex flex-col gap-0.5 mb-2">
                         <h1 className="font-semibold text-title text-3xl">Регистрация</h1>
                         <p>Создайте аккаунт за пару секунд</p>
                     </div>
                     {/**Логин инпут */}
-                    <div className="mb-6">
+                    <div className="mb-3">
                         <label className="flex flex-col gap-1">
                             <p>ЛОГИН</p>
                             <input placeholder="login" value={login} onChange={ (e) => setLogin(e.target.value) }
@@ -49,7 +49,7 @@ export default function RegisterPage({onRegister}: Props) {
                         </label>
                     </div>
                     {/**Номер телефона инпут */}
-                    <div className="mb-6">
+                    <div className="mb-3">
                         <label className="flex flex-col gap-1">
                             <p>НОМЕР ТЕЛЕФОНА</p>
                             <input placeholder="77777777777" value={phoneNumber} onChange={ (e) => setPhoneNumber(e.target.value) }
@@ -57,15 +57,23 @@ export default function RegisterPage({onRegister}: Props) {
                         </label>
                     </div>
                     {/**Мэйл инпут */}
-                    <div className="mb-6">
+                    <div className="mb-3">
                         <label className="flex flex-col gap-1">
                             <p>EMAIL</p>
                             <input placeholder="user@email.com" value={mail} onChange={ (e) => setMail(e.target.value) }
                             className={`rounded-lg py-3 px-2 border ${ error ? 'border-error' : 'border-cardColor/70' } border-cardColor/70 bg-inputColor outline-none focus:border-accent`}/>
                         </label>
                     </div>
+                    {/**Мэйл инпут */}
+                    <div className="mb-3">
+                        <label className="flex flex-col gap-1">
+                            <p>ИМЯ</p>
+                            <input placeholder="name" value={name} onChange={ (e) => setName(e.target.value) }
+                            className={`rounded-lg py-3 px-2 border ${ error ? 'border-error' : 'border-cardColor/70' } border-cardColor/70 bg-inputColor outline-none focus:border-accent`}/>
+                        </label>
+                    </div>
                     {/**Пароль инпут */}
-                    <div className="mb-6">
+                    <div className="mb-3">
                         <label className="flex flex-col gap-1">
                             <p>ПАРОЛЬ</p>
                             <input type="password" value={password} placeholder="password" onChange={ (e) => setPassword(e.target.value) }
