@@ -6,6 +6,7 @@ import Cinema from "./pages/cinema/cinema"
 import Player from "./pages/player/player"
 import Add from "./pages/add/add"
 import Login from "./pages/login/login"
+import RegisterPage from "./pages/register/register"
 
 export default function App() {
   const [ready, setReady] = useState(false) // ждём пока проверим сессию
@@ -40,6 +41,7 @@ export default function App() {
       <Route path="/" element={authed ? <Cinema /> : <Navigate to="/login" />} />
       <Route path="/watch" element={authed ? <Player /> : <Navigate to="/login" />} />
       <Route path="/add" element={authed ? <Add /> : <Navigate to="/login" />} />
+      <Route path="/register" element={<RegisterPage onRegister={() => setAuthed(true)}></RegisterPage>}></Route>
     </Routes>
   )
 }

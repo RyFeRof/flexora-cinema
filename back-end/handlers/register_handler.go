@@ -29,7 +29,18 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	http.SetCookie(w, &http.Cookie{
+		Name:     "refresh_token",
+		Value:    tokens.RefreshToken,
+		HttpOnly: true,
+		Secure:   false, // только на локалке
+		SameSite: http.SameSiteLaxMode,
+		Path:     "/",
+		MaxAge:   7 * 24 * 3600,
+	})
+
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(tokens)
+	json.NewEncoder(w).Encode(map[string]string{
+		"access_token": tokens.AccessToken,
+	})
 }

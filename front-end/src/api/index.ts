@@ -79,9 +79,9 @@ export const login = async (login: string, password: string) => {
         }, { withCredentials: true })
     setAccessToken(response.data.access_token)
 }
-export const register = async (us: User) => {
+export const register = async (login: string, password: string, mail: string, name: string, phone_number:string) => {
     const response = await axios.post('/api/register', {
-        ...us
+        login, password, mail, name, phone_number, device_id: getDeviceId()
     }, {withCredentials: true})
     setAccessToken(response.data.access_token)
 }
