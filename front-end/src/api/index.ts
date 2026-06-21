@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { Film, Release, User} from "../types"
+import type { Film, Release} from "../types"
 // import FilmCard from "../components/film_card/film_card";
 
 const api = axios.create({

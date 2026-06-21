@@ -10,7 +10,6 @@ import (
 func RefreshToken(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("refresh_token")
 	if err != nil {
-		log.Println(err)
 		http.Error(w, "refresh token not found", http.StatusUnauthorized)
 		return
 	}
