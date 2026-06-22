@@ -44,7 +44,7 @@ export default function Add(){
             setSucces(`Добавление фильма прошло успешно! Id фильма ${id}`)
         }
         catch (e) {
-            console.error(e)
+            console.log(e)
             setError('Не удалось сохранить фильм в бд')
         }
         finally {

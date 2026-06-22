@@ -1,48 +1,19 @@
-import {useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import type { Film } from "../../types";
 import { getFilms } from "../../api";
 import FilmCard from "../../components/film_card/film_card";
-import SearchBar from "../../components/header/searchBar";
-import ProfileBtn from "../../components/header/profileButton";
-//delete this down
-import Logo from "../../components/header/Logo"
-import NavigationBtn from "../../components/header/navigation";
-//delete this up
+import MainLayout from "../../layouts/mainLayout";
+import HeroBanner from "../../components/banner/banner";
 
 export default function Home() {
     const [films, setFilms] = useState<Film[]>([])
-    const [selectedFilm, setSelectedFilm] = useState<Film | null>(null)
 
-    useEffect(() => { 
+    useEffect(() => {
         getFilms().then(data => { setFilms(data.filter(film => film.card?.path)) })
     }, [])
-
-    const [searchOpen, setSearchOpen] = useState(false)
-
-    const handleCardClick = (film: Film) => {
-        if (selectedFilm?.id === film.id) {
-            setSelectedFilm(null)
-        } else {
-            setSelectedFilm(film)
-        }
-    }
-
     return (
-        <div className=" bg-black min-h-screen text-white p-8">
-            <Logo/>
-            <NavigationBtn/>
-            <SearchBar isOpen={searchOpen} onClose={() => setSearchOpen(false)} onOpen={() => setSearchOpen(true)}/>
-            <ProfileBtn></ProfileBtn>
-            <div className="grid grid-cols-4 gap-4">
-                {films.map(film => (
-                    <FilmCard
-                        key={film.id}
-                        film={film}
-                        onClick={handleCardClick}
-                        isSelected={selectedFilm?.id === film.id}>
-
-                </FilmCard>))}
-            </div>
-        </div>
+        <MainLayout>
+            <HeroBanner films={films}></HeroBanner>
+        </MainLayout>
     )
 }

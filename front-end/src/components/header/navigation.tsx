@@ -2,20 +2,20 @@ import { NavLink } from "react-router-dom";
 
 const links= [
     { to: "/", label: "Главная" },
-    { to: "/films", label: "Фильм" },
-    { to: "/series", label: "Сериал" },
+    { to: "/films", label: "Фильмы" },
+    { to: "/series", label: "Сериалы" },
 ]
 
 export default function NavigationBtn() {
     return (
-        <nav>
+        <nav className="flex items-center gap-12">
             {
                 links.map(link => (
                     <NavLink key={link.to} 
                     to={link.to} 
                     end={link.to === '/'} 
-                    className={({ isActive }) => `border-b-2 pb-1 transition-colors ${
-                        isActive ? `border-amber-500 text-white` : `border-transparent text-gray-400 hover:text-white`
+                    className={({ isActive }) => `text-lg  border-b-2 transition-colors ${
+                        isActive ? `border-accent text-title` : `border-transparent text-textColor hover:text-title`
                     }`}>
                         {link.label}
                     </NavLink>

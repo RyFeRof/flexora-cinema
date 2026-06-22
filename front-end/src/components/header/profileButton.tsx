@@ -3,8 +3,8 @@ export default function ProfileBtn(){
     return (
         <button
             onClick={handleClick}
-            aria-label="Профиль"
-            className="text-title/70 transition-colors hover:text-title ">
+            aria-label="Войти"
+            className="shrink-0 rounded-lg bg-accent px-6 py-2 text-md font-medium text-title transition-opacity hover:opacity-90">
                 Войти
         </button>
     )

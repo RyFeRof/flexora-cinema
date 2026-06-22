@@ -18,7 +18,7 @@ func UploadFile(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Ошибка получения файла", http.StatusBadRequest)
 		return
 	}
-	allowed := map[string]bool{".jpg": true, ".png": true, ".mp4": true, ".webp": true}
+	allowed := map[string]bool{".jpg": true, ".png": true, ".mp4": true, ".webp": true, ".webm": true}
 	if !allowed[filepath.Ext(handler.Filename)] {
 		http.Error(w, "Недопустимый тип файла", http.StatusBadRequest)
 		return

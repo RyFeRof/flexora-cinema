@@ -2,7 +2,6 @@ package repository
 
 import (
 	"errors"
-	"fmt"
 	"io"
 	"mime/multipart"
 	"os"
@@ -13,7 +12,7 @@ import (
 )
 
 func UploadFile(fileType string, handler *multipart.FileHeader, file multipart.File) (string, error) {
-	uploadDir := fmt.Sprintf("./uploads/%s", fileType)
+	uploadDir := filepath.Join("uploads", fileType)
 	os.MkdirAll(uploadDir, os.ModePerm)
 	ext := filepath.Ext(handler.Filename)
 	filename := uuid.New().String() + ext
@@ -28,6 +27,6 @@ func UploadFile(fileType string, handler *multipart.FileHeader, file multipart.F
 		return "", errors.New("Ошибка при записи файла")
 	}
 
-	publicPath := fmt.Sprintf("/uploads/%s/%s", fileType, filename)
+	publicPath := filepath.Join("uploads", fileType, filename)
 	return publicPath, nil
 }
