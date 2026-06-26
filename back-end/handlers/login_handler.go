@@ -8,10 +8,6 @@ import (
 )
 
 func Login(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Метод не поддерживается", http.StatusMethodNotAllowed)
-		return
-	}
 	var inp models.RegRequest
 	if err := json.NewDecoder(r.Body).Decode(&inp); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)

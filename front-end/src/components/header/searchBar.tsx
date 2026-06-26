@@ -47,7 +47,7 @@ export default function SearchBar({ isOpen, onOpen, onClose}: Props) {
         </button>
     )
     return (
-        <div className="relative w-72">
+        <div className="relative w-[36vw]">
             <div className="flex gap-2">
                 <input ref={inputRef} value={query} onChange={ (e) => setQuery(e.target.value)} onKeyDown={handleKeyDown} placeholder="Поиск фильмов и сериалов" 
                 className="flex-1 outline-none bg-inputColor border border-stroke focus:border-accent text-sm text-title placeholder:text-textColor rounded-lg py-2 px-3 transition-colors"/>

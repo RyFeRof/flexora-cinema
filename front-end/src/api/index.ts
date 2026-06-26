@@ -49,7 +49,7 @@ api.interceptors.response.use((res) => res, async (error) => {
         isRefreshing=true
         try {
             const { data } = await axios.post(
-                "/api/refresh",
+                "/api/auth/refresh",
                 {},
                 { withCredentials: true}
             )
@@ -72,7 +72,7 @@ api.interceptors.response.use((res) => res, async (error) => {
 })
 
 export const login = async (login: string, password: string) => {
-    const response = await axios.post('/api/login', {  // ← axios, не api
+    const response = await axios.post('/api/auth/login', {  // ← axios, не api
         login,
         password,
         device_id: getDeviceId()
@@ -80,7 +80,7 @@ export const login = async (login: string, password: string) => {
     setAccessToken(response.data.access_token)
 }
 export const register = async (login: string, password: string, mail: string, name: string, phone_number:string) => {
-    const response = await axios.post('/api/register', {
+    const response = await axios.post('/api/auth/register', {
         login, password, mail, name, phone_number, device_id: getDeviceId()
     }, {withCredentials: true})
     setAccessToken(response.data.access_token)
@@ -97,9 +97,8 @@ export const getFilms = async (): Promise<Film[]> => {
 }
 
 export const getRelease = async (film_id: number, season: number, seria: number): Promise<Release> => {
-    const response = await api.get(`/api/releases`,{
+    const response = await api.get(`/api/films/${film_id}`,{
         params: {
-            id: film_id,
             season: season,
             seria: seria
         }
@@ -111,7 +110,7 @@ export const uploadFile = async (file: File, type: 'trailer' | 'card' | 'logo'):
     const formData = new FormData()
     formData.append('file', file)
 
-    const response = await api.post(`/api/upload?type=${type}`, formData, {
+    const response = await api.post(`/api/films/upload?type=${type}`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
         }
@@ -121,7 +120,7 @@ export const uploadFile = async (file: File, type: 'trailer' | 'card' | 'logo'):
 }
 
 export const createFilm = async (film: Film): Promise<{ id: number }> => {
-    const response = await api.post('/api/add', film)
+    const response = await api.post('/api/films', film)
     return response.data
 }
 //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3ODE1MzQ0MjIsInVzZXJfaWQiOjF9.fYKLIB8zI_ENeUAKMUqWI7fMq1s42877s7a3uNKm1fc

@@ -8,10 +8,6 @@ import (
 )
 
 func Register(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Метод не поддерживается", http.StatusMethodNotAllowed)
-		return
-	}
 	var reg models.RegRequest
 	if err := json.NewDecoder(r.Body).Decode(&reg); err != nil {
 		http.Error(w, "Ошибка при получении данных", http.StatusBadRequest)

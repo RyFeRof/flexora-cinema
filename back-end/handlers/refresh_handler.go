@@ -13,17 +13,13 @@ func RefreshToken(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "refresh token not found", http.StatusUnauthorized)
 		return
 	}
-	if r.Method != http.MethodPost {
-		log.Println(err)
-		http.Error(w, "Метод не поддерживается", http.StatusMethodNotAllowed)
-		return
-	}
 	tokens, err := service.RefreshToken(cookie.Value)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
+	log.Println("Обращение к API refresh")
 	http.SetCookie(w, &http.Cookie{
 		Name:     "refresh_token",
 		Value:    tokens.RefreshToken,

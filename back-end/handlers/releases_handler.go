@@ -7,31 +7,41 @@ import (
 	"strconv"
 )
 
-// ПОПРАВИТЬ СЕЗОНЫ, ПОКА ЧТО В ССЫЛКЕ ОНИ ОБЯЗАТЕЛЬНЫ!!!!
 func GetRelease(w http.ResponseWriter, r *http.Request) {
-	idStr := r.URL.Query().Get("id")
+	idStr := r.PathValue("id")
 	numStr := r.URL.Query().Get("seria")
 	seasonStr := r.URL.Query().Get("season")
+
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
-		http.Error(w, "invalid id", 400)
+		http.Error(w, "invalid id", http.StatusBadRequest)
 		return
 	}
-	seria, err := strconv.Atoi(numStr)
-	if err != nil {
-		http.Error(w, "invalid seria", 400)
-		return
+
+	season := 1
+	seria := 1
+
+	if seasonStr != "" {
+		season, err = strconv.Atoi(seasonStr)
+		if err != nil {
+			http.Error(w, "invalid season", http.StatusBadRequest)
+			return
+		}
 	}
-	season, err := strconv.Atoi(seasonStr)
-	if err != nil {
-		http.Error(w, "invalid season", 400)
-		return
+	if numStr != "" {
+		seria, err = strconv.Atoi(numStr)
+		if err != nil {
+			http.Error(w, "invalid seria", http.StatusBadRequest)
+			return
+		}
 	}
+
 	rel, err := service.GetRelease(id, season, seria)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(rel)
 }
