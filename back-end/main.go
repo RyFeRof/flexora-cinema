@@ -1,11 +1,11 @@
 package main
 
 import (
+	"fullstack/context"
 	"fullstack/db"
 	"fullstack/middleware"
 	"fullstack/repository"
 	"fullstack/route"
-	"fullstack/service"
 	"log"
 	"net/http"
 	"os"
@@ -17,8 +17,7 @@ import (
 func main() {
 	godotenv.Load()
 	db.Init()
-	middleware.InitAuth(os.Getenv("JWT_SECRET"))
-	service.InitAuth(os.Getenv("JWT_SECRET"))
+	context.InitAuth(os.Getenv("JWT_SECRET"))
 	mux := route.SetupRouter()
 	log.Println("Сервер запущен на :8080")
 	go func() {

@@ -6,7 +6,6 @@ import (
 	"mime/multipart"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/google/uuid"
 )
@@ -16,7 +15,6 @@ func UploadFile(fileType string, handler *multipart.FileHeader, file multipart.F
 	os.MkdirAll(uploadDir, os.ModePerm)
 	ext := filepath.Ext(handler.Filename)
 	filename := uuid.New().String() + ext
-	filename = strings.ReplaceAll(filename, " ", "_")
 	savePath := filepath.Join(uploadDir, filename)
 	dst, err := os.Create(savePath)
 	if err != nil {

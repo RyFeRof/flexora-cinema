@@ -1,18 +1,18 @@
 package handlers
 
 import (
-	"fmt"
+	"encoding/json"
 	"fullstack/repository"
 	"net/http"
 	"path/filepath"
 )
 
 func UploadFile(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Метод не подходит", http.StatusMethodNotAllowed)
+	if err := r.ParseMultipartForm(150 << 20); err != nil {
+		http.Error(w, "Ошибка получения файла.Файл слишком большой", http.StatusBadRequest)
 		return
 	}
-	r.ParseMultipartForm(500 << 20)
+
 	file, handler, err := r.FormFile("file")
 	if err != nil {
 		http.Error(w, "Ошибка получения файла", http.StatusBadRequest)
@@ -25,8 +25,9 @@ func UploadFile(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 	fileType := r.URL.Query().Get("type")
-	if fileType == "" {
-		http.Error(w, "Тип файла не указан", http.StatusBadRequest)
+	allowed = map[string]bool{"trailer": true, "card": true, "logo": true}
+	if !allowed[fileType] {
+		http.Error(w, "недопустимый тип", http.StatusBadRequest)
 		return
 	}
 	publicPath, err := repository.UploadFile(fileType, handler, file)
@@ -36,5 +37,5 @@ func UploadFile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	fmt.Fprintf(w, `{"path": "%s"}`, publicPath)
+	json.NewEncoder(w).Encode(map[string]string{"path": publicPath})
 }

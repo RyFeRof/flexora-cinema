@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"fullstack/context"
 	"fullstack/models"
 	"fullstack/repository"
 	"strings"
@@ -14,22 +15,16 @@ type TokenPair struct {
 	RefreshToken string `json:"refresh_token"`
 }
 
-var jwt *models.Manager
-
-func InitAuth(secret string) {
-	jwt = models.NewManager(secret)
-}
-
 func generateTokenPair(userId int, deviceId string) (*TokenPair, error) {
-	accesToken, err := jwt.GenerateAccesToken(userId, deviceId)
+	accesToken, err := context.JwtManager.GenerateAccesToken(userId, deviceId)
 	if err != nil {
 		return nil, err
 	}
-	refreshToke, err := jwt.GenerateRefreshToken(userId, deviceId)
+	refreshToke, err := context.JwtManager.GenerateRefreshToken(userId, deviceId)
 	if err != nil {
 		return nil, err
 	}
-	claims, err := jwt.Parse(refreshToke)
+	claims, err := context.JwtManager.Parse(refreshToke)
 	if err != nil {
 		return nil, err
 	}
@@ -83,7 +78,7 @@ func Login(login, password, deviceId string) (*TokenPair, error) {
 }
 
 func RefreshToken(refreshTokenStr string) (*TokenPair, error) {
-	claims, err := jwt.Parse(refreshTokenStr)
+	claims, err := context.JwtManager.Parse(refreshTokenStr)
 	if err != nil {
 		return nil, err
 	}
