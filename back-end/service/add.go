@@ -1,13 +1,14 @@
 package service
 
 import (
+	"context"
 	"errors"
 	"fullstack/models"
 	"fullstack/repository"
 	"strings"
 )
 
-func AddProject(film models.Film) (int, error) {
+func AddProject(ctx context.Context, film models.Film) (int, error) {
 	if strings.TrimSpace(film.Title) == "" {
 		return 0, errors.New("Название фильма обязательно")
 	}
@@ -23,5 +24,5 @@ func AddProject(film models.Film) (int, error) {
 	if film.Trailer == nil || strings.TrimSpace(film.Trailer.Path) == "" {
 		return 0, errors.New("Трейлер фильма обязателен")
 	}
-	return repository.AddProject(film)
+	return repository.AddProject(ctx, film)
 }

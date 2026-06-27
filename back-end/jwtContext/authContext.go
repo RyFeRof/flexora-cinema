@@ -1,4 +1,4 @@
-package context
+package jwtcontext
 
 import "fullstack/models"
 

@@ -13,7 +13,8 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Ошибка при получении данных", http.StatusBadRequest)
 		return
 	}
-	tokens, err := service.Register(models.User{
+	ctx := r.Context()
+	tokens, err := service.Register(ctx, models.User{
 		Name:        reg.Name,
 		Login:       reg.Login,
 		Password:    reg.Password,

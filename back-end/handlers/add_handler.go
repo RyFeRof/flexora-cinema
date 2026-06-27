@@ -4,18 +4,17 @@ import (
 	"encoding/json"
 	"fullstack/models"
 	"fullstack/service"
-	"log"
 	"net/http"
 )
 
 func AddProject(w http.ResponseWriter, r *http.Request) {
 	var films models.Film
-	log.Println("Метод одобрен,идем дальше")
 	if err := json.NewDecoder(r.Body).Decode(&films); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	id, err := service.AddProject(films)
+	ctx := r.Context()
+	id, err := service.AddProject(ctx, films)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return

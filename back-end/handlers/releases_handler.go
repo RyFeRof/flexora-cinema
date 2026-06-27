@@ -35,8 +35,8 @@ func GetRelease(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-
-	rel, err := service.GetRelease(id, season, seria)
+	ctx := r.Context()
+	rel, err := service.GetRelease(ctx, id, season, seria)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

@@ -1,18 +1,17 @@
 package db
 
 import (
-	"database/sql"
+	"context"
 	"fmt"
 	"log"
 	"os"
 
-	_ "github.com/lib/pq"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-var DB *sql.DB
+var DB *pgxpool.Pool
 
 func Init() {
-	var err error
 	connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		os.Getenv("DB_HOST"),
 		os.Getenv("DB_PORT"),
@@ -20,19 +19,18 @@ func Init() {
 		os.Getenv("DB_PASSWORD"),
 		os.Getenv("DB_NAME"),
 	)
-	DB, err = sql.Open("postgres", connStr)
+	var err error
+	DB, err = pgxpool.New(context.Background(), connStr)
 	if err != nil {
 		log.Fatal("Ошибка подключения бд:", err)
-		return
 	}
-	err = DB.Ping()
-	if err != nil {
-		log.Fatal("Нет ответа от  бд:", err)
-		return
+	if err = DB.Ping(context.Background()); err != nil {
+		log.Fatal("Нет ответа от бд:", err)
 	}
-	log.Println("Подключение к бд:успешно")
+	log.Println("Подключение к бд: успешно")
 	migrate()
 }
+
 func migrate() {
 	queries := []string{
 		`CREATE TABLE IF NOT EXISTS Trailers(
@@ -147,7 +145,7 @@ func migrate() {
 			id SERIAL PRIMARY KEY,
 			title TEXT NOT NULL UNIQUE,
 			countMembers INT NOT NULL,
-			validityTime INT NOT NULL 
+			validityTime INT NOT NULL
 		);`, //validityTime - в днях
 		`CREATE TABLE IF NOT EXISTS Groups(
 			id SERIAL PRIMARY KEY,
@@ -194,13 +192,10 @@ func migrate() {
 		`CREATE INDEX IF NOT EXISTS idx_seasons_filmid ON Seasons(filmId);`,
 	}
 	for _, query := range queries {
-		_, err := DB.Exec(query)
+		_, err := DB.Exec(context.Background(), query)
 		if err != nil {
-			log.Fatal("Ошибка миграции", err)
-			return
+			log.Fatal("Ошибка миграции:", err)
 		}
 	}
-
 	log.Println("Миграция успешна")
-
 }

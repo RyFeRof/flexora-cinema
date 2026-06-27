@@ -23,7 +23,8 @@ func GetFilms(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	films, err := service.GetFilms(limit, lastId)
+	ctx := r.Context()
+	films, err := service.GetFilms(ctx, limit, lastId)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

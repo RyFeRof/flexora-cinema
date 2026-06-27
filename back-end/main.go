@@ -1,8 +1,9 @@
 package main
 
 import (
-	"fullstack/context"
+	"context"
 	"fullstack/db"
+	jwtcontext "fullstack/jwtContext"
 	"fullstack/middleware"
 	"fullstack/repository"
 	"fullstack/route"
@@ -17,14 +18,14 @@ import (
 func main() {
 	godotenv.Load()
 	db.Init()
-	context.InitAuth(os.Getenv("JWT_SECRET"))
+	jwtcontext.InitAuth(os.Getenv("JWT_SECRET"))
 	mux := route.SetupRouter()
 	log.Println("Сервер запущен на :8080")
 	go func() {
 		ticker := time.NewTicker(1 * time.Hour)
 		defer ticker.Stop()
 		for range ticker.C {
-			if err := repository.DeleteExpired(); err != nil {
+			if err := repository.DeleteExpired(context.Background()); err != nil {
 				log.Printf("ошибка очистки токенов: %v", err)
 			}
 		}

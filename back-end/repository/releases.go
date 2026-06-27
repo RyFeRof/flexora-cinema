@@ -1,23 +1,17 @@
 package repository
 
 import (
+	"context"
 	"fullstack/db"
 	"fullstack/models"
 )
 
-func GetRelease(id int, season int, seria int) (models.Release, error) {
-	row := db.DB.QueryRow(`
-        SELECT r.id,
-            f.id,
-            r.number_seria,
-            r.name,
-            COALESCE(s.numberSeason, 0),
-			m.path,
-            l.path,
-            COALESCE(r.timeIntro,''),
-			COALESCE(r.timeOutro,''),
-			COALESCE(r.timeIntroEnd,''),
-			COALESCE(r.timeOutroEnd,'')
+func GetRelease(ctx context.Context, id int, season int, seria int) (models.Release, error) {
+	row := db.DB.QueryRow(ctx, `
+        SELECT r.id, f.id, r.number_seria, r.name,
+            COALESCE(s.numberSeason, 0), m.path, l.path,
+            COALESCE(r.timeIntro,''), COALESCE(r.timeOutro,''),
+            COALESCE(r.timeIntroEnd,''), COALESCE(r.timeOutroEnd,'')
         FROM Releases r
         LEFT JOIN Films f on f.id=r.filmId
         LEFT JOIN FilmLogos fl on fl.filmid=f.id
@@ -29,25 +23,11 @@ func GetRelease(id int, season int, seria int) (models.Release, error) {
 
 	var r models.Release
 	var l models.Logo
-
-	err := row.Scan(
-		&r.Id,
-		&r.FilmId,
-		&r.NumSeria,
-		&r.Title,
-		&r.NumberSeason,
-		&r.Material,
-		&l.Path,
-		&r.TimeIntro,
-		&r.TimeOutro,
-		&r.TimeIntroEnd,
-		&r.TimeOutroEnd,
-	)
-
+	err := row.Scan(&r.Id, &r.FilmId, &r.NumSeria, &r.Title, &r.NumberSeason,
+		&r.Material, &l.Path, &r.TimeIntro, &r.TimeOutro, &r.TimeIntroEnd, &r.TimeOutroEnd)
 	if err != nil {
 		return r, err
 	}
-
 	r.Logo = &l
 	return r, nil
 }

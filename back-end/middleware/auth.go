@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"fullstack/context"
+	jwtcontext "fullstack/jwtContext"
 	"fullstack/models"
 	"net/http"
 	"strings"
@@ -18,7 +18,7 @@ func AuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 
 		tokenStr := strings.TrimPrefix(authHeader, "Bearer ")
 
-		claims, err := context.JwtManager.Parse(tokenStr)
+		claims, err := jwtcontext.JwtManager.Parse(tokenStr)
 		if err != nil {
 			http.Error(w, "invalid token", http.StatusUnauthorized)
 			return

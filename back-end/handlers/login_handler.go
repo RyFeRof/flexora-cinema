@@ -13,7 +13,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	tokens, err := service.Login(inp.Login, inp.Password, inp.DeviceId)
+	ctx := r.Context()
+	tokens, err := service.Login(ctx, inp.Login, inp.Password, inp.DeviceId)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

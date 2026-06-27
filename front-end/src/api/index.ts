@@ -123,4 +123,3 @@ export const createFilm = async (film: Film): Promise<{ id: number }> => {
     const response = await api.post('/api/films', film)
     return response.data
 }
-//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3ODE1MzQ0MjIsInVzZXJfaWQiOjF9.fYKLIB8zI_ENeUAKMUqWI7fMq1s42877s7a3uNKm1fc
