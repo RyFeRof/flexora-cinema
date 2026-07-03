@@ -1,21 +1,3 @@
-DROP INDEX IF EXISTS idx_seasons_filmid;
-DROP INDEX IF EXISTS idx_feedback_releaseid;
-DROP INDEX IF EXISTS idx_feedback_userid;
-DROP INDEX IF EXISTS idx_groupusers_groupid;
-DROP INDEX IF EXISTS idx_groupusers_userid;
-DROP INDEX IF EXISTS idx_watchhistories_filmid;
-DROP INDEX IF EXISTS idx_watchhistories_userid;
-DROP INDEX IF EXISTS idx_releases_seasonid;
-DROP INDEX IF EXISTS idx_releases_filmid;
-DROP INDEX IF EXISTS idx_filmcards_filmid;
-DROP INDEX IF EXISTS idx_filmlogos_filmid;
-DROP INDEX IF EXISTS idx_filmcountries_filmid;
-DROP INDEX IF EXISTS idx_filmgenres_genreid;
-DROP INDEX IF EXISTS idx_filmgenres_filmid;
-DROP INDEX IF EXISTS idx_tokens_expiry;
-DROP INDEX IF EXISTS idx_tokens_device;
-DROP INDEX IF EXISTS idx_tokens_user;
-
 DROP TABLE IF EXISTS RefreshJwtTokens;
 DROP TABLE IF EXISTS Feedback;
 DROP TABLE IF EXISTS GroupUsers;

@@ -45,6 +45,9 @@ func migration(databaseURL string) error {
 		}
 		return fmt.Errorf("Ошибка миграции: %w", err)
 	}
+	if err := m.Force(1); err != nil { // 1 = версия, на которой база реально находится (после миграции 1)
+		log.Fatal(err)
+	}
 	log.Println("Миграции прошли успешно")
 	return nil
 }
