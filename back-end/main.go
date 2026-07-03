@@ -10,6 +10,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/joho/godotenv"
@@ -20,7 +22,13 @@ func main() {
 	db.Init()
 	jwtcontext.InitAuth(os.Getenv("JWT_SECRET"))
 	mux := route.SetupRouter()
+	serv := &http.Server{
+		Addr:    ":8080",
+		Handler: middleware.CorsMiddleware(mux),
+	}
+
 	log.Println("Сервер запущен на :8080")
+
 	go func() {
 		ticker := time.NewTicker(1 * time.Hour)
 		defer ticker.Stop()
@@ -30,5 +38,25 @@ func main() {
 			}
 		}
 	}()
-	log.Fatal(http.ListenAndServe(":8080", middleware.CorsMiddleware(mux)))
+
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+
+	go func() {
+		if err := serv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatal(err)
+		}
+	}()
+
+	<-ctx.Done()
+
+	shutDownCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	if err := serv.Shutdown(shutDownCtx); err != nil {
+		log.Printf("ошибка при остановке сервера: %v", err)
+	}
+	db.DB.Close()
+	log.Println("Сервер остановлен")
+
 }

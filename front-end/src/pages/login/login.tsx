@@ -73,32 +73,3 @@ export default function Login({onLogin}: Props) {
         </div>
     )
 }
-/**
- * <div class="m_trailer_container">
-                <img src="//avatars.mds.yandex.net/get-ott/1531675/2a00000194fe69e46a7aaf9244d12fc65341/2016x1134" id="trailer-img" class="m_background">
-                <video src="/static/data/trailers/Кухня 1.mp4" id="trailer-video" class="m_background m_tc_opacityOn" muted loop></video>
-                <a href="#" class="leftArrow">
-                    <svg class="icon" width="17" height="36" viewBox="0 0 17 36" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.5001 17.9998L16.6001 3.1998L13.4001 0.799805L0.500097 17.9998L13.4001 35.1998L16.6001 32.7998L5.5001 17.9998Z" fill="currentColor"></path></svg>
-                </a>
-                <a href="#" class="rightArrow">
-                    <svg class="icon" width="17" height="36" viewBox="0 0 17 36" style="transform: rotate(180deg);" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.5001 17.9998L16.6001 3.1998L13.4001 0.799805L0.500097 17.9998L13.4001 35.1998L16.6001 32.7998L5.5001 17.9998Z" fill="currentColor"></path></svg>
-                </a>
-                <div class="m_big_description">
-                    <img src="//avatars.mds.yandex.net/get-ott/200035/2a00000194fe6a286ccf3af7c14ead5c9479/960x540">
-                    <p>Молодой повар-провинциал попадает в адский котел модного ресторана. Один из лучших российских ситкомов</p>
-                </div>
-                <div class="controls">
-                    <img id="trailer-logo" class="logo_img m_tc_opacityOn" src="//avatars.mds.yandex.net/get-ott/200035/2a00000194fe6a286ccf3af7c14ead5c9479/960x540">
-                    <div>
-                        <a href="#" class="btns" id="watch_btn">Смотреть сериал</a>
-                        <a href="#" class="btns">О сериале</a>
-                        <a href="#" class="btns" style="padding:18px">
-                            <svg width="3.6rem" height="3.6rem" viewBox="0 0 36 36" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M28.05 13.5V9.3h4.575V5.7H28.05V1.125h-3.6V5.7h-4.2v3.6h4.2v4.2h3.6ZM11.475 5.625h4.275v3.6h-4.275v16.353l4.868-2.524 1.657-.86 1.657.86 4.868 2.524V18h3.6v13.5l-3.6-1.867L18 26.25l-6.525 3.383-3.6 1.867V5.625h3.6Z"></path></svg>
-                        </a>
-                        <a href="#" class="btns" style="padding:18px">
-                            <svg width="2.4rem" height="2.4rem" viewBox="0 0 24 24" fill="#FFF"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.6 12a7.6 7.6 0 1 1-15.2 0 7.6 7.6 0 0 1 15.2 0Zm2.4 0c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10ZM7.5 13.8h9v-3.6h-9v3.6Z"></path></svg>
-                        </a>
-                    </div>
-                </div>
-            </div>
- */
