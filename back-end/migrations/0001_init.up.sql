@@ -73,8 +73,7 @@ CREATE TABLE IF NOT EXISTS FilmFilmingMembers(
 
 CREATE TABLE IF NOT EXISTS Materials(
     id SERIAL PRIMARY KEY,
-    path TEXT NOT NULL,
-    durationSeconds INT NOT NULL
+    path TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Seasons(
@@ -87,10 +86,10 @@ CREATE TABLE IF NOT EXISTS Seasons(
 CREATE TABLE IF NOT EXISTS Releases(
     id SERIAL PRIMARY KEY,
     filmId INT REFERENCES Films(id),
-    seasonId INT REFERENCES Seasons(id),
+    seasonId INT REFERENCES Seasons(id) NULL,
     materialId INT REFERENCES Materials(id),
-    number_seria INT NOT NULL,
-    name TEXT NOT NULL,
+    number_seria INT  NULL,
+    name TEXT NULL,
     dateCreate DATE NOT NULL DEFAULT NOW(),
     timeIntro TEXT,
     timeOutro TEXT,
@@ -142,7 +141,7 @@ CREATE TABLE IF NOT EXISTS GroupUsers(
 CREATE TABLE IF NOT EXISTS Feedback(
     id SERIAL PRIMARY KEY,
     Valuation INT NOT NULL CHECK (Valuation > 0 AND Valuation <= 10),
-    text TEXT NOT NULL,
+    text TEXT  NULL,
     userId INT REFERENCES Users(id) ON DELETE SET NULL,
     releaseId INT REFERENCES Releases(id) ON DELETE CASCADE
 );

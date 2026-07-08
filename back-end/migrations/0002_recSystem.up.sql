@@ -2,14 +2,14 @@
 
 CREATE EXTENSION IF NOT EXISTS vector;
 
-ALTER TABLE Films ADD COLUMN embedding vector(3072);
+ALTER TABLE Films ADD COLUMN IF NOT EXISTS embedding vector(3072);
 
-CREATE TABLE shelves (
+CREATE TABLE IF NOT EXISTS shelves (
     id   SERIAL PRIMARY KEY,
     type TEXT NOT NULL UNIQUE
 );
 
-CREATE TABLE user_recomendations (
+CREATE TABLE IF NOT EXISTS user_recomendations (
     id                 SERIAL PRIMARY KEY,
     user_id            INT NOT NULL REFERENCES Users(id) ON DELETE CASCADE,
     shelf_id           INT NOT NULL REFERENCES shelves(id) ON DELETE CASCADE,
@@ -21,7 +21,7 @@ CREATE TABLE user_recomendations (
     UNIQUE(user_id, shelf_id, movie_id, source_entity_id, source_entity_type)
 );
 
-CREATE TABLE user_events (
+CREATE TABLE IF NOT EXISTS user_events (
     id               SERIAL PRIMARY KEY,
     user_id          INT NOT NULL REFERENCES Users(id) ON DELETE CASCADE,
     event_type       TEXT NOT NULL CHECK (event_type IN ('view', 'like', 'watch_complete', 'search_click', 'click', 'view_trailer')),
@@ -32,7 +32,7 @@ CREATE TABLE user_events (
     UNIQUE(user_id, event_type, entity_id, entity_type)
 );
 
-CREATE TABLE user_factors (
+CREATE TABLE IF NOT EXISTS user_factors (
     id         SERIAL PRIMARY KEY,
     user_id    INT NOT NULL UNIQUE REFERENCES Users(id) ON DELETE CASCADE,
     factors    FLOAT[] NOT NULL,
@@ -40,18 +40,18 @@ CREATE TABLE user_factors (
     updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
-CREATE TABLE movie_factors (
+CREATE TABLE IF NOT EXISTS movie_factors (
     id         SERIAL PRIMARY KEY,
     movie_id   INT NOT NULL UNIQUE REFERENCES Films(id) ON DELETE CASCADE,
     factors    FLOAT[] NOT NULL,
     movie_bias FLOAT NOT NULL DEFAULT 0,
     updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
-CREATE INDEX idx_userEvents_user ON user_events(user_id);
-CREATE INDEX idx_movieFactors_movie ON movie_factors(movie_id);
-CREATE INDEX idx_userFactors_user ON user_factors(user_id);
-CREATE INDEX idx_userEvents_entity ON user_events(entity_type, entity_id);
-CREATE INDEX idx_userRecomendations_movie ON user_recomendations(movie_id);
-CREATE INDEX idx_userRecomendations_shelf ON user_recomendations(shelf_id);
-CREATE INDEX idx_userRecomendations_user ON user_recomendations(user_ID);
+CREATE INDEX IF NOT EXISTS idx_userEvents_user ON user_events(user_id);
+CREATE INDEX IF NOT EXISTS idx_movieFactors_movie ON movie_factors(movie_id);
+CREATE INDEX IF NOT EXISTS idx_userFactors_user ON user_factors(user_id);
+CREATE INDEX IF NOT EXISTS idx_userEvents_entity ON user_events(entity_type, entity_id);
+CREATE INDEX IF NOT EXISTS idx_userRecomendations_movie ON user_recomendations(movie_id);
+CREATE INDEX IF NOT EXISTS idx_userRecomendations_shelf ON user_recomendations(shelf_id);
+CREATE INDEX IF NOT EXISTS idx_userRecomendations_user ON user_recomendations(user_ID);
 

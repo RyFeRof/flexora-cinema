@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	"fullstack/cache"
 	"fullstack/db"
+	"fullstack/gemini"
 	jwtcontext "fullstack/jwtContext"
 	"fullstack/middleware"
 	"fullstack/repository"
@@ -20,6 +22,14 @@ import (
 func main() {
 	godotenv.Load()
 	db.Init()
+	err := gemini.Init(context.Background(), os.Getenv("GEMINI_API_KEY"))
+	if err != nil {
+		log.Panicf("Ошибка инициализации gemini API: %v", err)
+	}
+	err = cache.Init(context.Background())
+	if err != nil {
+		log.Panicf("Ошибка инициализации референса фильма: %v", err)
+	}
 	jwtcontext.InitAuth(os.Getenv("JWT_SECRET"))
 	mux := route.SetupRouter()
 	serv := &http.Server{
