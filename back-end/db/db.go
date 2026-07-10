@@ -10,26 +10,39 @@ import (
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+	pgvectorpgx "github.com/pgvector/pgvector-go/pgx"
 )
 
 var DB *pgxpool.Pool
 
 func Init() {
-
 	var err error
 	databaseURL := os.Getenv("DB_URL")
-	DB, err = pgxpool.New(context.Background(), databaseURL)
+
+	config, err := pgxpool.ParseConfig(databaseURL)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	config.AfterConnect = func(ctx context.Context, conn *pgx.Conn) error {
+		return pgvectorpgx.RegisterTypes(ctx, conn)
+	}
+
+	ctx := context.Background()
+
+	DB, err = pgxpool.NewWithConfig(ctx, config) // ← без ":", иначе тень на пакетную DB
 	if err != nil {
 		log.Fatal("Ошибка подключения бд:", err)
+	}
+	if err := migration(databaseURL); err != nil {
+		log.Fatal(err)
 	}
 	if err = DB.Ping(context.Background()); err != nil {
 		log.Fatal("Нет ответа от бд:", err)
 	}
 	log.Println("Подключение к бд: успешно")
-	if err := migration(databaseURL); err != nil {
-		log.Fatal(err)
-	}
 
 }
 func migration(databaseURL string) error {

@@ -7,6 +7,7 @@ import (
 	"fullstack/models"
 
 	"github.com/jackc/pgx/v5"
+	"github.com/pgvector/pgvector-go"
 )
 
 func AddProject(ctx context.Context, req models.CreateFilmRequest, vector []float32) (int, error) {
@@ -22,8 +23,13 @@ func AddProject(ctx context.Context, req models.CreateFilmRequest, vector []floa
 	err = tx.QueryRow(ctx, `INSERT INTO Trailers(path) VALUES($1) RETURNING id;`, req.TrailerPath).Scan(&film.Trailer.Id)
 	if err != nil {
 		return -1, err
+
 	}
-	err = tx.QueryRow(ctx, "INSERT INTO Films(title,description,isSerial,trailerId,embedding) VALUES($1,$2,$3,$4,$5) RETURNING id;", req.Title, req.Description, req.IsSerial, film.Trailer.Id, vector).Scan(&film.Id)
+	embedding := pgvector.NewVector(vector) // vector — твой []float32
+	err = tx.QueryRow(ctx,
+		"INSERT INTO Films(title,description,isSerial,trailerId,embedding) VALUES($1,$2,$3,$4,$5) RETURNING id;",
+		req.Title, req.Description, req.IsSerial, film.Trailer.Id, embedding,
+	).Scan(&film.Id)
 	if err != nil {
 		return -1, err
 	}
@@ -52,13 +58,16 @@ func AddProject(ctx context.Context, req models.CreateFilmRequest, vector []floa
 		batch.Queue(`INSERT INTO FilmFilmingMembers (filmId, memberId, roleId) VALUES ($1, $2, $3);`, film.Id, fm.Id, fm.RoleId)
 	}
 	br := tx.SendBatch(ctx, batch)
-	defer br.Close()
-
 	for range req.FilmingMembers {
 		if _, err := br.Exec(); err != nil {
+			br.Close()
 			return -1, fmt.Errorf("ошибка вставки участников: %w", err)
 		}
 	}
+	if err := br.Close(); err != nil {
+		return -1, fmt.Errorf("ошибка вставки участников: %w", err)
+	}
+
 	var materialId int
 	err = tx.QueryRow(ctx, "INSERT INTO Materials(path) VALUES($1) RETURNING id;", req.MaterialPath).Scan(&materialId)
 	if err != nil {

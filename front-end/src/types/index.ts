@@ -14,6 +14,53 @@ export interface Card {
     is_horizontal: boolean | null
 }
 
+export interface Genre {
+    id: number
+    genre: string
+}
+
+export interface Country {
+    id: number
+    country: string
+}
+
+export interface Role {
+    id: number
+    role: string
+}
+
+export interface Member {
+    id: number
+    member: string
+}
+
+export interface FilmingMemberEntry {
+    id: number
+    role_id: number
+}
+
+export interface Timeline {
+    time_intro: string
+    time_outro: string
+    time_intro_end: string
+    time_outro_end: string
+}
+
+export interface CreateFilmRequest {
+    title: string
+    description: string
+    is_serial: boolean
+    genre_ids: number[]
+    country_ids: number[]
+    filming_members: FilmingMemberEntry[]
+    card_path: string
+    is_horizontal: boolean
+    logo_path: string
+    trailer_path: string
+    material_path: string
+    time_line: Timeline
+}
+
 export interface Film {
     id: number | null
     title: string | null
@@ -22,6 +69,9 @@ export interface Film {
     card: Card | null
     logo: Logo | null
     description: string | null
+    genres?: Genre[] | null
+    countries?: Country[] | null
+    created_at?: string | null
 }
 
 export interface Release {

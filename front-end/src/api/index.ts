@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { Film, Release} from "../types"
+import type { Film, Release, Genre, Country, Role, Member, CreateFilmRequest } from "../types"
 // import FilmCard from "../components/film_card/film_card";
 
 const api = axios.create({
@@ -46,13 +46,9 @@ api.interceptors.response.use((res) => res, async (error) => {
                 })
             })
         }
-        isRefreshing=true
+        isRefreshing = true
         try {
-            const { data } = await axios.post(
-                "/api/auth/refresh",
-                {},
-                { withCredentials: true}
-            )
+            const { data } = await axios.post("/api/auth/refresh", {}, { withCredentials: true })
             setAccessToken(data.access_token)
             proccessQueueQueries(accessToken)
             originalQuery.headers.Authorization = `Bearer ${accessToken}`
@@ -66,9 +62,10 @@ api.interceptors.response.use((res) => res, async (error) => {
             return Promise.reject(error)
         }
         finally {
-            isRefreshing=false
+            isRefreshing = false
         }
     }
+    return Promise.reject(error) // ← вот эта строка отсутствовала
 })
 
 export const login = async (login: string, password: string) => {
@@ -106,7 +103,7 @@ export const getRelease = async (film_id: number, season: number, seria: number)
     return response.data ?? null
 }
 
-export const uploadFile = async (file: File, type: 'trailer' | 'card' | 'logo'): Promise<string> => {
+export const uploadFile = async (file: File, type: 'trailer' | 'card' | 'logo' | 'material'): Promise<string> => {
     const formData = new FormData()
     formData.append('file', file)
 
@@ -119,7 +116,64 @@ export const uploadFile = async (file: File, type: 'trailer' | 'card' | 'logo'):
     return response.data.path
 }
 
-export const createFilm = async (film: Film): Promise<{ id: number }> => {
-    const response = await api.post('/api/films', film)
+export const getFilmsPage = async (limit: number, lastId: number): Promise<Film[]> => {
+    const response = await api.get('/api/films', {
+        params: { last_id: lastId, limit }
+    })
+    return response.data ?? []
+}
+
+export const createFilm = async (film: CreateFilmRequest): Promise<{ id: number }> => {
+    const response = await api.post('/api/films', film) // response === undefined
+    return response.data // TypeError: Cannot read properties of undefined (reading 'data')
+}
+
+// --- Справочники: жанры ---
+export const getGenres = async (): Promise<Genre[]> => {
+    const response = await api.get('/api/films/genres')
+    return response.data ?? []
+}
+export const addGenre = async (genre: string): Promise<{ id: number }> => {
+    const response = await api.post('/api/films/genres', JSON.stringify(genre), {
+        headers: { 'Content-Type': 'application/json' }
+    })
+    return response.data
+}
+
+// --- Справочники: страны ---
+export const getCountries = async (): Promise<Country[]> => {
+    const response = await api.get('/api/films/countries')
+    return response.data ?? []
+}
+export const addCountry = async (country: string): Promise<{ id: number }> => {
+    const response = await api.post('/api/films/countries', JSON.stringify(country), {
+        headers: { 'Content-Type': 'application/json' }
+    })
+    return response.data
+}
+
+// --- Справочники: роли ---
+export const getRoles = async (): Promise<Role[]> => {
+    const response = await api.get('/api/films/roles')
+    return response.data ?? []
+}
+export const addRole = async (role: string): Promise<{ id: number }> => {
+    const response = await api.post('/api/films/roles', JSON.stringify(role), {
+        headers: { 'Content-Type': 'application/json' }
+    })
+    return response.data
+}
+
+// --- Участники съёмок ---
+export const searchFilmingMembers = async (query: string): Promise<Member[]> => {
+    const response = await api.get('/api/films/filming-members/search', {
+        params: { q: query }
+    })
+    return response.data ?? []
+}
+export const addFilmingMember = async (name: string): Promise<{ id: number }> => {
+    const response = await api.post('/api/films/filming-members', JSON.stringify(name), {
+        headers: { 'Content-Type': 'application/json' }
+    })
     return response.data
 }

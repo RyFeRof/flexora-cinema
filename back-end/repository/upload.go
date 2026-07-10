@@ -25,6 +25,6 @@ func UploadFile(fileType string, handler *multipart.FileHeader, file multipart.F
 		return "", errors.New("Ошибка при записи файла")
 	}
 
-	publicPath := filepath.Join("uploads", fileType, filename)
+	publicPath := filepath.Join("/uploads", fileType, filename)
 	return publicPath, nil
 }
