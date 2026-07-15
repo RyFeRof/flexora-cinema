@@ -9,6 +9,7 @@ import (
 	"fullstack/models"
 	"fullstack/repository"
 	"strings"
+	"time"
 )
 
 func getTextForEmbedding(title, description string, genres, countires, filmingMembers []string) string {
@@ -46,6 +47,16 @@ func AddProject(ctx context.Context, req models.CreateFilmRequest) (int, error) 
 	}
 	if strings.TrimSpace(req.MaterialPath) == "" {
 		return -1, errors.New("фильм обязателен")
+	}
+	if !req.DateCreate.IsZero() {
+		if req.DateCreate.UTC().Year() < 1900 {
+			return -1, errors.New("дата премьеры выглядит некорректно")
+		}
+		if req.DateCreate.After(time.Now()) {
+			return -1, errors.New("дата премьеры не может быть в будущем")
+		}
+	} else {
+		return -1, errors.New("дата премьеры релиза обязательна")
 	}
 	if strings.TrimSpace(req.Timeline.TimeIntro) != "" && strings.TrimSpace(req.Timeline.TimeIntroEnd) != "" && strings.TrimSpace(req.Timeline.TimeOutro) != "" && strings.TrimSpace(req.Timeline.TimeOutroEnd) != "" {
 		if err := validateTimeline(req.Timeline); err != nil {

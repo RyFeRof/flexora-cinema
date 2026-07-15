@@ -33,6 +33,7 @@ export default function AddFilmPage() {
 
     // поля формы
     const [title, setTitle] = useState("");
+    const [dateCreate, setDateCreate] = useState("")
     const [description, setDescription] = useState("");
     const [isSerial, setIsSerial] = useState(false);
     const [genreIds, setGenreIds] = useState<number[]>([]);
@@ -139,6 +140,7 @@ export default function AddFilmPage() {
         if (members.some((m) => m.roleId === null)) return "Назначьте роль каждому добавленному участнику";
         if (useTimeline && !timelineFilled && !timelineEmpty)
             return "Заполните все 4 поля таймлайна (интро/аутро) или оставьте их все пустыми";
+        if (!dateCreate) return "Укажите дату премьеры релиза";
         return null;
     };
 
@@ -152,6 +154,7 @@ export default function AddFilmPage() {
         }
 
         const req: CreateFilmRequest = {
+            date_create:`${dateCreate}T00:00:00Z`,
             title: title.trim(),
             description: description.trim(),
             is_serial: isSerial,
@@ -212,6 +215,18 @@ export default function AddFilmPage() {
                         rows={4}
                         placeholder="Описание"
                         className="resize-none rounded-lg border border-stroke bg-inputColor px-3 py-2.5 text-sm text-title outline-none focus:border-textColor"
+                    />
+                </label>
+
+                <label className="flex flex-col gap-2">
+                    <span className="text-sm text-textColor">Дата премьеры релиза</span>
+                    <input
+                        type="date"
+                        value={dateCreate}
+                        onChange={(e) => setDateCreate(e.target.value)}
+                        min="1900-01-01"
+                        max={new Date().toISOString().split('T')[0]}
+                        className="rounded-lg border border-stroke bg-inputColor px-3 py-2.5 text-sm text-title outline-none focus:border-textColor"
                     />
                 </label>
 

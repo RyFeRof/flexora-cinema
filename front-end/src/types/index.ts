@@ -59,6 +59,7 @@ export interface CreateFilmRequest {
     trailer_path: string
     material_path: string
     time_line: Timeline
+    date_create: string 
 }
 
 export interface Film {

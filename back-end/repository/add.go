@@ -25,7 +25,7 @@ func AddProject(ctx context.Context, req models.CreateFilmRequest, vector []floa
 		return -1, err
 
 	}
-	embedding := pgvector.NewVector(vector) // vector — твой []float32
+	embedding := pgvector.NewVector(vector)
 	err = tx.QueryRow(ctx,
 		"INSERT INTO Films(title,description,isSerial,trailerId,embedding) VALUES($1,$2,$3,$4,$5) RETURNING id;",
 		req.Title, req.Description, req.IsSerial, film.Trailer.Id, embedding,
@@ -73,7 +73,7 @@ func AddProject(ctx context.Context, req models.CreateFilmRequest, vector []floa
 	if err != nil {
 		return -1, err
 	}
-	_, err = tx.Exec(ctx, "INSERT INTO Releases(filmId, materialId, number_seria, name, timeIntro, timeOutro, timeIntroEnd, timeOutroEnd) VALUES($1,$2,$3,$4,$5,$6,$7,$8);", film.Id, materialId, 1, film.Title, req.Timeline.TimeIntro, req.Timeline.TimeOutro, req.Timeline.TimeIntroEnd, req.Timeline.TimeOutroEnd)
+	_, err = tx.Exec(ctx, "INSERT INTO Releases(filmId, materialId, number_seria, name, timeIntro, timeOutro, timeIntroEnd, timeOutroEnd, dateCreate) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9);", film.Id, materialId, 1, film.Title, req.Timeline.TimeIntro, req.Timeline.TimeOutro, req.Timeline.TimeIntroEnd, req.Timeline.TimeOutroEnd, req.DateCreate.UTC())
 	if err != nil {
 		return -1, err
 	}

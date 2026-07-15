@@ -21,7 +21,6 @@ function getDeviceId(): string {
     }
     return id;
 }
-
 api.interceptors.request.use((config) => {
     if (accessToken) config.headers.Authorization= `Bearer ${accessToken}`
     return config

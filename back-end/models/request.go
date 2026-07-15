@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 type CreateFilmRequest struct {
 	Title          string                 `json:"title"`
 	Description    string                 `json:"description"`
@@ -13,6 +15,7 @@ type CreateFilmRequest struct {
 	TrailerPath    string                 `json:"trailer_path"`
 	MaterialPath   string                 `json:"material_path"`
 	Timeline       Timeline               `json:"time_line"`
+	DateCreate     time.Time              `json:"date_create"`
 }
 type FilmingMemberRequest struct {
 	Id     int `json:"id"`
