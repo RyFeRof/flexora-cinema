@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fullstack/models"
 	"fullstack/service"
+	validator "fullstack/service/validate"
 	"net/http"
 )
 
@@ -15,6 +16,12 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 	ctx := r.Context()
 	tokens, err := service.Login(ctx, inp.Login, inp.Password, inp.DeviceId)
+	if errs := validator.Errors(err); errs != nil {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusUnprocessableEntity)
+		json.NewEncoder(w).Encode(map[string]any{"errors": errs})
+		return
+	}
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

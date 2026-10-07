@@ -54,7 +54,6 @@ type Film struct {
 	Logo           *Logo           `json:"logo"`
 	Description    string          `json:"description"`
 	TimeCreate     time.Time       `json:"created_at"`
-	Vector         []float32       `json:"embedding"`
 }
 
 type Release struct {

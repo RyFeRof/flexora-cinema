@@ -6,6 +6,7 @@ import (
 	jwtcontext "fullstack/jwtContext"
 	"fullstack/models"
 	"fullstack/repository"
+	validator "fullstack/service/validate"
 	"strings"
 
 	"golang.org/x/crypto/bcrypt"
@@ -36,7 +37,7 @@ func generateTokenPair(ctx context.Context, userId int, deviceId string) (*Token
 	return &TokenPair{AccessToken: accesToken, RefreshToken: refreshToke}, nil
 }
 
-func Register(ctx context.Context, user models.User, deviceId string) (*TokenPair, error) {
+func Register(ctx context.Context, user models.RegisterRequest, deviceId string) (*TokenPair, error) {
 	if strings.TrimSpace(user.Name) == "" {
 		return nil, errors.New("Invalid user.Name")
 	}
@@ -52,12 +53,22 @@ func Register(ctx context.Context, user models.User, deviceId string) (*TokenPai
 	if strings.TrimSpace(user.PhoneNumber) == "" {
 		return nil, errors.New("Invalid user.PhoneNumber")
 	}
+	if err := validator.ValidateRegister(user); err != nil {
+		return nil, err
+	}
+
 	hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return nil, err
 	}
 	user.Password = string(hash)
-	userId, err := repository.Register(ctx, user)
+	userId, err := repository.Register(ctx, models.User{
+		Login:       user.Login,
+		Password:    user.Password,
+		Mail:        user.Mail,
+		PhoneNumber: user.PhoneNumber,
+		Name:        user.Name,
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -67,6 +78,9 @@ func Register(ctx context.Context, user models.User, deviceId string) (*TokenPai
 func Login(ctx context.Context, login, password, deviceId string) (*TokenPair, error) {
 	if strings.TrimSpace(login) == "" {
 		return nil, errors.New("Invalid login")
+	}
+	if err := validator.ValidateLogin(models.LoginRequest{Login: login, Password: password}); err != nil {
+		return nil, err
 	}
 	user, err := repository.Login(ctx, login)
 	if err != nil {

@@ -2,29 +2,37 @@ import { useState } from "react";
 import { Link, useNavigate }  from "react-router-dom"
 import { login } from "../../api"
 import logo from "../../assets/voidex-logo.png"
-
+import { validateLogin, validatePassword } from "../../validator/validator";
 interface Props {
-  onLogin: () => void
+    onLogin: () => void
 }
 
 
 export default function Login({onLogin}: Props) {
     const [loginVal, setLogin] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState(false);
+    const [errors, setErrors] = useState<{ login?: string; password?: string[] }>({});
+    const [submitError, setSubmitError] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async () => {
+        const loginError = validateLogin(loginVal);
+        const passwordErrors = validatePassword(password);
+        if (loginError || passwordErrors.length > 0) {
+            setErrors({login: loginError ?? undefined, password: passwordErrors})
+            return;
+        }
         setLoading(true)
-        setError(false)
+        setErrors({})
+        setSubmitError('')
         try {
             await login(loginVal,password)
             onLogin()
             navigate('/')
         }
         catch {
-            setError(true)
+            setSubmitError('Неверный логин или пароль')
         }
         finally {
             setLoading(false)
@@ -41,25 +49,28 @@ export default function Login({onLogin}: Props) {
                         <h1 className="font-semibold text-title text-3xl">Вход</h1>
                         <p>Введите данные аккаунта</p>
                     </div>
-                    {/* Полz для логина */}
+                    {/* Поле для логина */}
                     <div className="mb-6">
                         <label className="flex flex-col gap-1">
                             <p>EMAIL ИЛИ ЛОГИН</p>
                             <input placeholder="login" value={loginVal} onChange={ (e) => setLogin(e.target.value) }
-                            className={`rounded-lg py-3 px-2 border ${ error ? 'border-error' : 'border-cardColor/70' } border-cardColor/70 bg-inputColor outline-none focus:border-accent`}/>
+                            className={`rounded-lg py-3 px-2 border ${ errors.login ? 'border-error' : 'border-cardColor/70' } bg-inputColor outline-none focus:border-accent`}/>
                         </label>
+                        {errors.login && <p className="mt-1 text-error">{errors.login}</p>}
                     </div>
                     {/** Поле для пароля */}
                     <div className="flex flex-col gap-1 mb-5">
                         <label className="flex flex-col gap-1">
                             <p>ПАРОЛЬ</p>
                             <input type="password" value={password} placeholder="password" onChange={ (e) => setPassword(e.target.value) }
-                            className={`rounded-lg py-3 px-2 border ${ error ? 'border-error' : 'border-cardColor/70' } border-cardColor/70 bg-inputColor outline-none focus:border-accent`}/>
+                            className={`rounded-lg py-3 px-2 border ${ errors.password?.length ? 'border-error' : 'border-cardColor/70' } bg-inputColor outline-none focus:border-accent`}/>
                         </label>
+                        {errors.password?.[0] && <p className="text-error">{errors.password[0]}</p>}
                         <Link to="/password/forgot">
                             <p className="text-accent underline underline-offset-3 text-right transition-colors hover:text-accent/80">Забыли пароль?</p>
                         </Link>
                     </div>
+                    {submitError && <p className="text-error mb-3">{submitError}</p>}
                     {/**Кнопка авторизации и ссылка на регистрацию */}
                     <button disabled={loading} onClick={handleSubmit} className="text-title cursor-pointer mb-4 text-2xl font-semibold py-3.5 px-4 rounded-2xl border-stroke border-2 transition-colors hover:border-accent disabled:opacity-50">Войти</button>
                     <div className="flex gap-1 justify-center">

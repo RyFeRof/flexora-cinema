@@ -27,3 +27,14 @@ type Timeline struct {
 	TimeIntroEnd string `json:"time_intro_end"`
 	TimeOutroEnd string `json:"time_outro_end"`
 }
+type RegisterRequest struct {
+	Name        string `json:"name" validate:"required,min=3,max=20,alpha"`
+	Login       string `json:"login" validate:"required,min=3,max=20,alphanum"`
+	Password    string `json:"password" validate:"required,min=8,max=64,excludesall=" ",password"`
+	Mail        string `json:"mail" validate:"required,mail"`
+	PhoneNumber string `json:"phone_number" validate:"required,len=11,numeric"`
+}
+type LoginRequest struct {
+	Login    string `json:"login" validate:"required,min=3,max=20,alphanum"`
+	Password string `json:"password" validate:"required,min=8,max=64,excludesall=" ",password"`
+}
