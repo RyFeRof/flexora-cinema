@@ -13,7 +13,7 @@ import (
 
 var validate = validator.New()
 
-func init() {
+func Init() {
 	validate.RegisterValidation("password", func(fl validator.FieldLevel) bool {
 		var up, low, digit bool
 		for _, r := range fl.Field().String() {

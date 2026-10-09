@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"context"
 	jwtcontext "fullstack/jwtContext"
 	"fullstack/models"
 	"net/http"
@@ -28,7 +29,9 @@ func AuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 			http.Error(w, "wrong token type", http.StatusUnauthorized)
 			return
 		}
-		next.ServeHTTP(w, r)
+		ctx := context.WithValue(r.Context(), "userId", claims.UserId)
+		ctx = context.WithValue(ctx, "deviceId", claims.DeviceId)
+		next.ServeHTTP(w, r.WithContext(ctx))
 
 	}
 }

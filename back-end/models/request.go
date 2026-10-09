@@ -38,3 +38,9 @@ type LoginRequest struct {
 	Login    string `json:"login" validate:"required,min=3,max=20,alphanum"`
 	Password string `json:"password" validate:"required,min=8,max=64,excludesall=" ",password"`
 }
+
+type ChangeRequest struct {
+	Id         int    `json:"id"`
+	ChangeType string `json:"change_type"`
+	Input      string `json:"input"`
+}
