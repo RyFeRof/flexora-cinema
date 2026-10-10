@@ -3,11 +3,14 @@ import Logo from "./Logo";
 import NavigationBtn from "./navigation";
 import SearchBar from "./searchBar";
 import ProfileBtn from "./profileButton";
+import { ProfilePanel } from "../../widgets/profile-panel";
 
 export default function Header() {
     const [searchOpen, setSearchOpen] = useState(false)
+    const [profileOpen, setProfileOpen] = useState(false)
 
     return (
+        <>
         <header className="fixed z-40 top-0 w-full border-b border-stroke bg-pageColor/20 backdrop-blur-md">
             <div className="mx-auto flex h-16 max-w-7xl items-center gap-8 px-6">
                 <Logo />
@@ -20,9 +23,11 @@ export default function Header() {
                         onOpen={() => setSearchOpen(true)}
                         onClose={() => setSearchOpen(false)}
                     />
-                    {!searchOpen && <ProfileBtn />}
+                    {!searchOpen && <ProfileBtn expanded={profileOpen} onClick={() => setProfileOpen(true)} />}
                 </div>
             </div>
         </header>
+        {profileOpen && <ProfilePanel onClose={() => setProfileOpen(false)} />}
+        </>
     )
 }

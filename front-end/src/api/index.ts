@@ -2,7 +2,7 @@ import axios from "axios";
 import type { Film, Release, Genre, Country, Role, Member, CreateFilmRequest } from "../types"
 // import FilmCard from "../components/film_card/film_card";
 
-const api = axios.create({
+export const api = axios.create({
     baseURL: '',
     withCredentials: true
 })
