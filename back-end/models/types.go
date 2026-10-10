@@ -13,3 +13,7 @@ type User struct {
 	PhoneNumber string    `json:"phone_number"`
 	CreatedAt   time.Time `json:"created_at"`
 }
+type UserSessions struct {
+	DeviceId     string `json:"device_id"`
+	IsThisDevice bool   `json:"is_this_device"`
+}
