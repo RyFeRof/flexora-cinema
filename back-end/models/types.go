@@ -12,6 +12,7 @@ type User struct {
 	Mail        string    `json:"mail"`
 	PhoneNumber string    `json:"phone_number"`
 	CreatedAt   time.Time `json:"created_at"`
+	Is_verify   bool      `json:"is_verify"`
 }
 type UserSessions struct {
 	DeviceId     string `json:"device_id"`

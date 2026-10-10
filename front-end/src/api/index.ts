@@ -13,7 +13,7 @@ export const setAccessToken = (tokenStr: string | null) => {
     accessToken = tokenStr
 } 
 
-function getDeviceId(): string {
+export function getDeviceId(): string {
     let id = localStorage.getItem("device_id");
     if (!id) {
         id = crypto.randomUUID();
@@ -75,11 +75,11 @@ export const login = async (login: string, password: string) => {
         }, { withCredentials: true })
     setAccessToken(response.data.access_token)
 }
-export const register = async (login: string, password: string, mail: string, name: string, phone_number:string) => {
-    const response = await axios.post('/api/auth/register', {
+// Бэк НЕ выдаёт токены при регистрации: сначала подтверждение почты (features/verify-email)
+export const register = async (login: string, password: string, mail: string, name: string, phone_number:string): Promise<void> => {
+    await axios.post('/api/auth/register', {
         login, password, mail, name, phone_number, device_id: getDeviceId()
     }, {withCredentials: true})
-    setAccessToken(response.data.access_token)
 }
 
 export const getFilms = async (): Promise<Film[]> => {

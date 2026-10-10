@@ -103,8 +103,9 @@ CREATE TABLE IF NOT EXISTS Users(
     login TEXT NOT NULL UNIQUE,
     name TEXT NOT NULL,
     password TEXT NOT NULL,
-    mail TEXT NOT NULL,
+    mail TEXT NOT NULL UNIQUE,
     phoneNumber TEXT NOT NULL UNIQUE,
+    is_verify boolean DEFAULT false not null,
     createdAt DATE NOT NULL DEFAULT NOW()
 );
 

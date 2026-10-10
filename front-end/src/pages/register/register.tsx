@@ -2,11 +2,10 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { register } from "../../api";
 import logo from "../../assets/voidex-logo.png"
+import { isDuplicateError } from "../../shared/lib/apiError";
+import { setPendingEmail } from "../../features/verify-email";
+import axios from "axios";
 import { validateLogin, validateMail, validateName, validatePassword, validatePhoneNumber } from "../../validator/validator";
-
-interface Props {
-    onRegister: () => void
-}
 
 interface Errors {
     login?: string
@@ -16,7 +15,7 @@ interface Errors {
     password?: string[]
 }
 
-export default function RegisterPage({ onRegister }: Props) {
+export default function RegisterPage() {
     const [login, setLogin] = useState('')
     const [name, setName] = useState('')
     const [password, setPassword] = useState('')
@@ -49,12 +48,24 @@ export default function RegisterPage({ onRegister }: Props) {
         setErrors({})
         setSubmitError('')
         try {
-            await register(login, password, mail, name, phoneNumber)
-            onRegister()
-            navigate('/')
+            const email = mail.trim().toLowerCase()
+            await register(login, password, email, name, phoneNumber)
+            // Токенов после регистрации нет: код уже ушёл на почту → шаг подтверждения
+            setPendingEmail(email)
+            navigate('/verify-email', { state: { email, codeSent: true } })
         }
-        catch {
-            setSubmitError('Не удалось зарегистрироваться')
+        catch (e) {
+            if (axios.isAxiosError(e) && e.response?.status === 422 && e.response.data?.errors) {
+                const fe = e.response.data.errors as Record<string, string>
+                setErrors({
+                    login: fe.login, phone: fe.phone_number, mail: fe.mail, name: fe.name,
+                    password: fe.password ? [fe.password] : undefined,
+                })
+            } else if (isDuplicateError(e)) {
+                setSubmitError('Логин, почта или телефон уже заняты. Если вы уже регистрировались, войдите: мы предложим подтвердить почту')
+            } else {
+                setSubmitError('Не удалось зарегистрироваться')
+            }
         }
         finally {
             setLoading(false)

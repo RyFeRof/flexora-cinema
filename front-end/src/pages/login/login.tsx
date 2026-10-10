@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate }  from "react-router-dom"
 import { login } from "../../api"
 import logo from "../../assets/voidex-logo.png"
+import { isUnverifiedError } from "../../features/verify-email";
 import { validateLogin, validatePassword } from "../../validator/validator";
 interface Props {
     onLogin: () => void
@@ -14,6 +15,7 @@ export default function Login({onLogin}: Props) {
     const [errors, setErrors] = useState<{ login?: string; password?: string[] }>({});
     const [submitError, setSubmitError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [unverified, setUnverified] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async () => {
@@ -26,13 +28,15 @@ export default function Login({onLogin}: Props) {
         setLoading(true)
         setErrors({})
         setSubmitError('')
+        setUnverified(false)
         try {
             await login(loginVal,password)
             onLogin()
             navigate('/')
         }
-        catch {
-            setSubmitError('Неверный логин или пароль')
+        catch (e) {
+            if (isUnverifiedError(e)) setUnverified(true)
+            else setSubmitError('Неверный логин или пароль')
         }
         finally {
             setLoading(false)
@@ -71,6 +75,16 @@ export default function Login({onLogin}: Props) {
                         </Link>
                     </div>
                     {submitError && <p className="text-error mb-3">{submitError}</p>}
+                    {unverified && (
+                        <div className="mb-4 rounded-xl border border-accent/40 bg-accent/10 p-4">
+                            <p className="text-title">Почта не подтверждена</p>
+                            <p className="mt-1 text-base">Подтвердите её кодом из письма, и вы войдёте в аккаунт.</p>
+                            <button type="button" onClick={() => navigate('/verify-email')}
+                                className="mt-3 rounded-xl bg-accent px-4 py-2 text-base font-semibold text-pageColor transition-opacity hover:opacity-90">
+                                Подтвердить почту
+                            </button>
+                        </div>
+                    )}
                     {/**Кнопка авторизации и ссылка на регистрацию */}
                     <button disabled={loading} onClick={handleSubmit} className="text-title cursor-pointer mb-4 text-2xl font-semibold py-3.5 px-4 rounded-2xl border-stroke border-2 transition-colors hover:border-accent disabled:opacity-50">Войти</button>
                     <div className="flex gap-1 justify-center">

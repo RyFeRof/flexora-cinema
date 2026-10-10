@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom"
 import Login from "./pages/login/login"
 import RegisterPage from "./pages/register/register"
+import VerifyEmailPage from "./pages/verify-email/verifyEmail"
 import ProtectedRoutes from "./components/protectedRoutes/protectedRoutes"
 import Cinema from './pages/cinema/cinema'
 import Player from './pages/player/player'
@@ -18,7 +19,8 @@ export default function App() {
     <Routes>
       {/* Публичные роуты */}
       <Route path="/login" element={<Login onLogin={() => setAuthed(true)} />} />
-      <Route path="/register" element={<RegisterPage onRegister={() => setAuthed(true)} />} />
+      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/verify-email" element={<VerifyEmailPage onVerified={() => setAuthed(true)} />} />
 
       {/* Защищенные роуты */}
       <Route element={<ProtectedRoutes />}>

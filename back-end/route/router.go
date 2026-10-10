@@ -10,6 +10,8 @@ func SetupRouter() *http.ServeMux {
 	uploads := http.FileServer(http.Dir("uploads")) // относительный путь
 	mux := http.NewServeMux()
 	mux.Handle("/uploads/", http.StripPrefix("/uploads/", uploads))
+	mux.HandleFunc("POST /api/auth/send-verification", handlers.SendVerifyCode)
+	mux.HandleFunc("POST /api/auth/verify-email", handlers.VerifyCode)
 	mux.HandleFunc("GET /api/user/sessions", middleware.AuthMiddleware(handlers.GetUserSessions))
 	mux.HandleFunc("DELETE /api/user/sessions", middleware.AuthMiddleware(handlers.DeleteUserSession))
 	mux.HandleFunc("POST /api/auth/logout", middleware.AuthMiddleware(handlers.Logout))

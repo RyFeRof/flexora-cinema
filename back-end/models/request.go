@@ -44,3 +44,9 @@ type ChangeRequest struct {
 	ChangeType string `json:"change_type"`
 	Input      string `json:"input"`
 }
+type VerifyCodeRequest struct {
+	Purpose  string `json:"purpose"`
+	Email    string `json:"email"`
+	Code     string `json:"code"`
+	DeviceId string `json:"device_id"`
+}

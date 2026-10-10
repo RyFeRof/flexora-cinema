@@ -15,7 +15,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	ctx := r.Context()
-	tokens, err := service.Register(ctx, models.RegisterRequest{
+	err := service.Register(ctx, models.RegisterRequest{
 		Name:        reg.Name,
 		Login:       reg.Login,
 		Password:    reg.Password,
@@ -33,19 +33,10 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.SetCookie(w, &http.Cookie{
-		Name:     "refresh_token",
-		Value:    tokens.RefreshToken,
-		HttpOnly: true,
-		Secure:   false, // только на локалке
-		SameSite: http.SameSiteLaxMode,
-		Path:     "/",
-		MaxAge:   7 * 24 * 3600,
-	})
-
 	w.WriteHeader(http.StatusCreated)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{
-		"access_token": tokens.AccessToken,
+		"status": "verification_required",
+		"email":  reg.Mail,
 	})
 }

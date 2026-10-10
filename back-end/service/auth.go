@@ -37,32 +37,32 @@ func generateTokenPair(ctx context.Context, userId int, deviceId string) (*Token
 	return &TokenPair{AccessToken: accesToken, RefreshToken: refreshToke}, nil
 }
 
-func Register(ctx context.Context, user models.RegisterRequest, deviceId string) (*TokenPair, error) {
+func Register(ctx context.Context, user models.RegisterRequest, deviceId string) error {
 	if strings.TrimSpace(user.Name) == "" {
-		return nil, errors.New("Invalid user.Name")
+		return errors.New("Invalid user.Name")
 	}
 	if strings.TrimSpace(user.Login) == "" {
-		return nil, errors.New("Invalid user.Login")
+		return errors.New("Invalid user.Login")
 	}
 	if strings.TrimSpace(user.Password) == "" {
-		return nil, errors.New("Invalid user.Password")
+		return errors.New("Invalid user.Password")
 	}
 	if strings.TrimSpace(user.Mail) == "" {
-		return nil, errors.New("Invalid user.Mail")
+		return errors.New("Invalid user.Mail")
 	}
 	if strings.TrimSpace(user.PhoneNumber) == "" {
-		return nil, errors.New("Invalid user.PhoneNumber")
+		return errors.New("Invalid user.PhoneNumber")
 	}
 	if err := validator.ValidateRegister(user); err != nil {
-		return nil, err
+		return err
 	}
 
 	hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	user.Password = string(hash)
-	userId, err := repository.Register(ctx, models.User{
+	err = repository.Register(ctx, models.User{
 		Login:       user.Login,
 		Password:    user.Password,
 		Mail:        user.Mail,
@@ -70,9 +70,9 @@ func Register(ctx context.Context, user models.RegisterRequest, deviceId string)
 		Name:        user.Name,
 	})
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return generateTokenPair(ctx, userId, deviceId)
+	return SendVerifyCode(ctx, "verify", user.Mail)
 }
 
 func Login(ctx context.Context, login, password, deviceId string) (*TokenPair, error) {
@@ -88,6 +88,9 @@ func Login(ctx context.Context, login, password, deviceId string) (*TokenPair, e
 	}
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
 		return nil, errors.New("Неверный логин или пароль")
+	}
+	if !user.Is_verify {
+		return nil, errors.New("Регистарция не подтверждена")
 	}
 	return generateTokenPair(ctx, user.Id, deviceId)
 }
@@ -117,4 +120,29 @@ func Logout(ctx context.Context, userID int, deviceID string) error {
 
 func LogoutAll(ctx context.Context, userID int) error {
 	return repository.RevokeTokenAll(ctx, userID)
+}
+
+func VerifyCode(ctx context.Context, purpose, email, plainCode, deviceId string) (*TokenPair, error) {
+	email = strings.ToLower(strings.TrimSpace(email))
+	plainCode = strings.TrimSpace(plainCode)
+
+	if email == "" || plainCode == "" {
+		return nil, errors.New("email и код обязательны")
+	}
+	if purpose != "verify" && purpose != "reset" {
+		return nil, errors.New("некорректный purpose")
+	}
+	if err := repository.VerifyCode(ctx, purpose, email, plainCode); err != nil {
+		return nil, err
+	}
+	user, err := repository.GetUserByEmail(ctx, email) // id, email_verified, ...
+	if err != nil {
+		return nil, errors.New("пользователь не найден")
+	}
+
+	if err := repository.SetEmailVerified(ctx, user.Id); err != nil {
+		return nil, err
+	}
+
+	return generateTokenPair(ctx, user.Id, deviceId)
 }

@@ -10,6 +10,7 @@ import (
 	"fullstack/repository"
 	"fullstack/route"
 	validator "fullstack/service/validate"
+	"fullstack/verify"
 	"log"
 	"net/http"
 	"os"
@@ -23,6 +24,10 @@ import (
 func main() {
 	godotenv.Load()
 	db.Init()
+	verify.Init()
+	if err := db.RedisInit(); err != nil {
+		log.Fatal(err)
+	}
 	validator.Init()
 	err := gemini.Init(context.Background(), os.Getenv("GEMINI_API_KEY"))
 	if err != nil {
@@ -69,6 +74,7 @@ func main() {
 		log.Printf("ошибка при остановке сервера: %v", err)
 	}
 	db.DB.Close()
+	_ = db.Close()
 	log.Println("Сервер остановлен")
 
 }
