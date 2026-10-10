@@ -24,7 +24,7 @@ func GetUserSessions(ctx context.Context, userId int, deviceId string) ([]models
 		us.IsThisDevice = us.DeviceId == deviceId
 		data = append(data, us)
 	}
-	return data, nil
+	return data, rows.Err()
 }
 func DeleteUserSession(ctx context.Context, userId int, deviceId string) error {
 	tag, err := db.DB.Exec(ctx, `UPDATE RefreshJwtTokens SET revoked=true WHERE userId=$1 and deviceId=$2 and revoked=false`, userId, deviceId)
