@@ -12,12 +12,12 @@ export default function Header() {
     return (
         <>
         <header className="fixed z-40 top-0 w-full border-b border-stroke bg-pageColor/20 backdrop-blur-md">
-            <div className="mx-auto flex h-16 max-w-7xl items-center gap-8 px-6">
-                <Logo />
-                {!searchOpen && <div className="m-auto">
-                    <NavigationBtn/>    
+            <div className="mx-auto flex min-h-16 max-w-7xl flex-wrap items-center gap-x-4 px-4 sm:px-6 md:flex-nowrap md:gap-8">
+                <div className={searchOpen ? "hidden sm:block" : ""}><Logo /></div>
+                {!searchOpen && <div className="order-last w-full overflow-x-auto pb-2 md:order-none md:m-auto md:w-auto md:pb-0">
+                    <NavigationBtn/>
                 </div>}
-                <div className="flex items-center gap-5">
+                <div className={`flex items-center gap-4 sm:gap-5 ${searchOpen ? "flex-1 justify-end sm:flex-none" : "ml-auto md:ml-0"}`}>
                     <SearchBar
                         isOpen={searchOpen}
                         onOpen={() => setSearchOpen(true)}

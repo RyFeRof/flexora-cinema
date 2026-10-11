@@ -8,13 +8,13 @@ const links= [
 
 export default function NavigationBtn() {
     return (
-        <nav className="flex items-center gap-12">
+        <nav className="flex items-center gap-8 whitespace-nowrap md:gap-12">
             {
                 links.map(link => (
                     <NavLink key={link.to} 
                     to={link.to} 
                     end={link.to === '/'} 
-                    className={({ isActive }) => `text-lg  border-b-2 transition-colors ${
+                    className={({ isActive }) => `text-base md:text-lg border-b-2 transition-colors ${
                         isActive ? `border-accent text-title` : `border-transparent text-textColor hover:text-title`
                     }`}>
                         {link.label}

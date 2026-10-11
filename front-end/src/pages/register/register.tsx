@@ -73,13 +73,13 @@ export default function RegisterPage() {
     }
 
     return (
-        <div className="bg-pageColor w-screen h-full min-h-screen justify-center items-center flex">
-            <div className="flex flex-col items-center">
-                <img src={logo} className="max-w-2xs align-middle items-center my-4" />
-                <div className="flex flex-col bg-cardColor min-w-xl border border-gray-950 p-6 rounded-3xl text-textColor text-lg font-extralight">
+        <div className="bg-pageColor w-full min-h-screen justify-center items-center flex px-4 py-6">
+            <div className="flex w-full max-w-xl flex-col items-center">
+                <img src={logo} className="w-40 max-w-full sm:w-auto sm:max-w-2xs align-middle items-center my-4" />
+                <div className="flex w-full flex-col bg-cardColor border border-gray-950 p-5 sm:p-6 rounded-3xl text-textColor text-base sm:text-lg font-extralight">
                     {/**Приветственный текст */}
                     <div className="flex flex-col gap-0.5 mb-2">
-                        <h1 className="font-semibold text-title text-3xl">Регистрация</h1>
+                        <h1 className="font-semibold text-title text-2xl sm:text-3xl">Регистрация</h1>
                         <p>Создайте аккаунт за пару секунд</p>
                     </div>
                     {/**Логин инпут */}
@@ -129,7 +129,7 @@ export default function RegisterPage() {
                     </div>
                     {submitError && <p className="text-error mb-3">{submitError}</p>}
                     {/**Кнопка регистрации и ссылка на авторизацию */}
-                    <button disabled={loading} onClick={handleClick} className="text-title cursor-pointer mb-4 text-2xl font-semibold py-3.5 px-4 rounded-2xl border-stroke border-2 transition-colors hover:border-accent disabled:opacity-50">Создать аккаунт</button>
+                    <button disabled={loading} onClick={handleClick} className="text-title cursor-pointer mb-4 text-xl sm:text-2xl font-semibold py-3.5 px-4 rounded-2xl border-stroke border-2 transition-colors hover:border-accent disabled:opacity-50">Создать аккаунт</button>
                     <div className="flex gap-1 justify-center">
                         <p>Есть аккаунт?</p>
                         <Link to="/login">

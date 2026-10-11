@@ -38,13 +38,17 @@ func main() {
 		log.Panicf("Ошибка инициализации референса фильма: %v", err)
 	}
 	jwtcontext.InitAuth(os.Getenv("JWT_SECRET"))
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
 	mux := route.SetupRouter()
 	serv := &http.Server{
-		Addr:    ":8080",
+		Addr:    ":" + port,
 		Handler: middleware.CorsMiddleware(mux),
 	}
 
-	log.Println("Сервер запущен на :8080")
+	log.Println("Сервер слушает адрес:", serv.Addr)
 
 	go func() {
 		ticker := time.NewTicker(1 * time.Hour)

@@ -57,14 +57,14 @@ export default function VerifyEmailPage({ onVerified }: Props) {
     }
 
     return (
-        <div className="flex justify-center min-h-screen min-w-screen bg-pageColor">
-            <div className="flex flex-col items-center">
-                <img src={logo} alt="Voidex" className="max-w-2xs align-middle items-center my-15" />
-                <div className="flex flex-col bg-cardColor min-w-xl border border-gray-950 py-10 px-6 rounded-3xl text-textColor text-lg font-extralight">
+        <div className="flex justify-center min-h-screen w-full bg-pageColor px-4 pb-8">
+            <div className="flex w-full max-w-xl flex-col items-center">
+                <img src={logo} alt="Voidex" className="w-48 max-w-full sm:w-auto sm:max-w-2xs align-middle items-center my-8 sm:my-15" />
+                <div className="flex w-full flex-col bg-cardColor border border-gray-950 py-8 px-5 sm:py-10 sm:px-6 rounded-3xl text-textColor text-base sm:text-lg font-extralight">
                     <div className="flex flex-col gap-0.5 mb-6">
-                        <h1 className="font-semibold text-title text-3xl">Подтверждение почты</h1>
+                        <h1 className="font-semibold text-title text-2xl sm:text-3xl">Подтверждение почты</h1>
                         {email ? (
-                            <p>Мы отправили 6-значный код на <span className="text-title">{email}</span></p>
+                            <p>Мы отправили 6-значный код на <span className="break-all text-title">{email}</span></p>
                         ) : (
                             <p>Укажите почту, с которой регистрировались — отправим код</p>
                         )}
@@ -98,7 +98,7 @@ export default function VerifyEmailPage({ onVerified }: Props) {
                                 type="button"
                                 disabled={sending}
                                 onClick={() => void requestCode()}
-                                className="text-title cursor-pointer mb-4 text-2xl font-semibold py-3.5 px-4 rounded-2xl border-stroke border-2 transition-colors hover:border-accent disabled:opacity-50"
+                                className="text-title cursor-pointer mb-4 text-xl sm:text-2xl font-semibold py-3.5 px-4 rounded-2xl border-stroke border-2 transition-colors hover:border-accent disabled:opacity-50"
                             >
                                 {sending ? "Отправляем…" : "Получить код"}
                             </button>

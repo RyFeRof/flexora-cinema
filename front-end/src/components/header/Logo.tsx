@@ -3,7 +3,7 @@ import logo from "../../assets/flexora logo.svg"
 export default function Logo(){
     return (
         <Link to="/add" className="shrink-0 transition-opacity hover:opacity-80">
-            <img src={logo} alt="Flexora kino" className="h-12 w-auto" />
+            <img src={logo} alt="Flexora kino" className="h-9 w-auto sm:h-12" />
         </Link>
     )
 }

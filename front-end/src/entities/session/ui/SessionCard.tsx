@@ -19,11 +19,11 @@ export default function SessionCard({ session, action }: Props) {
             </div>
             <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium text-title">
-                    {current ? "Это устройство" : `Устройство ${shortDeviceId(session.device_id)}`}
+                    {current ? "Это устройство" : "Другое устройство"}
                 </p>
-                <p className="flex items-center gap-1.5 text-xs text-textColor">
+                <p className="flex items-center gap-1.5 truncate text-xs text-textColor">
                     <span className="size-1.5 rounded-full bg-emerald-400" />
-                    {current ? `Вы здесь · ${shortDeviceId(session.device_id)}` : "Активная сессия"}
+                    {current ? `Вы здесь · ${shortDeviceId(session.device_id)}` : `${shortDeviceId(session.device_id)} · Активная сессия`}
                 </p>
             </div>
             {action && <div className="shrink-0">{action}</div>}

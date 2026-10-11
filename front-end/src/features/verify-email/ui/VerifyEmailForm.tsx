@@ -67,7 +67,7 @@ export default function VerifyEmailForm({ email, initialCooldown = 0, onVerified
                         disabled={verifying}
                         onChange={(e) => { setCode(e.target.value.replace(/\D/g, "")); if (error) setError("") }}
                         onKeyDown={(e) => { if (e.key === "Enter") void submit() }}
-                        className={`rounded-lg py-3 px-2 border text-center text-3xl tracking-[0.5em] text-title ${error ? "border-error" : "border-cardColor/70"} bg-inputColor outline-none focus:border-accent disabled:opacity-60`}
+                        className={`rounded-lg py-3 px-2 border min-w-0 text-center text-2xl sm:text-3xl tracking-[0.4em] sm:tracking-[0.5em] text-title ${error ? "border-error" : "border-cardColor/70"} bg-inputColor outline-none focus:border-accent disabled:opacity-60`}
                     />
                 </label>
                 {error && <p role="alert" className="mt-1 text-error">{error}</p>}
@@ -78,7 +78,7 @@ export default function VerifyEmailForm({ email, initialCooldown = 0, onVerified
                 type="button"
                 disabled={verifying || code.length !== 6}
                 onClick={() => void submit()}
-                className="text-title cursor-pointer mb-4 text-2xl font-semibold py-3.5 px-4 rounded-2xl border-stroke border-2 transition-colors hover:border-accent disabled:cursor-not-allowed disabled:opacity-50"
+                className="text-title cursor-pointer mb-4 text-xl sm:text-2xl font-semibold py-3.5 px-4 rounded-2xl border-stroke border-2 transition-colors hover:border-accent disabled:cursor-not-allowed disabled:opacity-50"
             >
                 {verifying ? "Проверяем…" : "Подтвердить"}
             </button>

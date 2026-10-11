@@ -53,7 +53,7 @@ export default function HeroBanner({ films }: HeroBannerProps) {
 
     return (
         <div
-        className="relative h-[80vh] w-full overflow-hidden"
+        className="relative h-[75svh] min-h-[460px] w-full overflow-hidden sm:h-[80vh]"
         style={{
         opacity: phase === "flash-out" ? 0 : 1,
         transition: phase === "flash-out"
@@ -82,36 +82,38 @@ export default function HeroBanner({ films }: HeroBannerProps) {
             }}
             autoPlay muted loop playsInline/>
 
+      { /* Тень снизу на узких экранах: текст идёт на всю ширину */ }
+        <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 to-transparent sm:hidden" />
       { /* Тень слева — перекрывает постер/видео */ }
-        <div className="absolute inset-0"
+        <div className="absolute inset-0 hidden sm:block"
             style={{
                 background: "linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.5) 60%, transparent 70%)",
             }}/>
 
       { /* Контент — лого, текст, кнопки */ }
-        <div className="absolute inset-0 flex flex-col justify-end pb-16 pl-12">
+        <div className="absolute inset-0 flex flex-col justify-end px-4 pb-14 sm:pb-16 sm:pl-12 sm:pr-6">
             {film.logo?.path && (
             <img
                 src={film.logo?.path ?? ''}
-                className="mb-4 h-30 w-auto object-contain object-left"
+                className="mb-3 h-16 w-auto max-w-full object-contain object-left sm:mb-4 sm:h-30"
             />
             )}
             
-            <p className="text-white/80 text-base text-md max-w-sm mb-6 leading-relaxed">
+            <p className="text-white/80 text-sm sm:text-base max-w-sm mb-5 sm:mb-6 leading-relaxed line-clamp-3 sm:line-clamp-none">
                 {film.description}
             </p>
-            <div className="flex gap-3">
-                <button className="bg-accent text-title px-7 py-3.5 rounded-full font-medium flex items-center gap-2 hover:scale-105 transition-transform">
+            <div className="flex flex-wrap gap-3">
+                <button className="bg-accent text-title px-5 py-3 text-sm sm:px-7 sm:py-3.5 sm:text-base rounded-full font-medium flex items-center gap-2 hover:scale-105 transition-transform">
                     ▶ Смотреть
                 </button>
-                <button className="bg-white/20 text-title px-7 py-3.5 rounded-full font-medium backdrop-blur-sm hover:scale-105 transition-transform">
+                <button className="bg-white/20 text-title px-5 py-3 text-sm sm:px-7 sm:py-3.5 sm:text-base rounded-full font-medium backdrop-blur-sm hover:scale-105 transition-transform">
                     О сериале
                 </button>
             </div>
         </div>
 
       { /* Точки-индикаторы */ }
-        <div className="absolute bottom-6 left-12 flex gap-2">
+        <div className="absolute bottom-5 left-4 flex gap-2 sm:bottom-6 sm:left-12">
             {films.map((_, i) => (
             <button
                 key={i}

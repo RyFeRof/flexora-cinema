@@ -1,0 +1,8 @@
+.git
+.gitignore
+**/node_modules
+front-end
+**/.env
+**/.env.*
+back-end/uploads
+**/.DS_Store

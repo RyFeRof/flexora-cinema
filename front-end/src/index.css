@@ -14,3 +14,13 @@
     --color-pageColor: #0f0f0f;
     --color-stroke: #262626;
 }
+
+/* iOS Safari зумит страницу при фокусе на поле с шрифтом < 16px.
+   Правило вне @layer, чтобы перебить утилиты вроде text-sm. */
+@media (max-width: 639px) {
+    input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+    select,
+    textarea {
+        font-size: 16px;
+    }
+}

@@ -1,35 +1,51 @@
-version: '3.8'
-services: 
+
+services:
   postgres:
-    image: postgres:16
+    image: pgvector/pgvector:pg16
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 135720hk
-      POSTGRES_DB: onlinekino
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?задайте POSTGRES_PASSWORD в .env}
+      POSTGRES_DB: ${POSTGRES_DB:-onlinekino}
     ports:
       - "5433:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-onlinekino}"]
       interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
   app:
     build: .
     ports:
       - "8080:8080"
     environment:
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_USER: postgres
-      DB_PASSWORD: 135720hk
-      DB_NAME: onlinekino
+      DB_URL: postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-onlinekino}?sslmode=disable
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: ${JWT_SECRET:?задайте JWT_SECRET в .env}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:?задайте GEMINI_API_KEY в .env}
+      RESEND_API_KEY: ${RESEND_API_KEY:?задайте RESEND_API_KEY в .env}
+      EMAIL_FROM: "${EMAIL_FROM:-Voidex <onboarding@resend.dev>}"
+      CORS_ORIGIN: http://localhost:5173
+      COOKIE_SECURE: "false"
     depends_on:
       postgres:
         condition: service_healthy
+      redis:
+        condition: service_healthy
     volumes:
-      - ./front-end:/front-end
-      - ./uploads:./uploads
+      - ./back-end/uploads:/app/uploads
+
 volumes:
   pgdata:

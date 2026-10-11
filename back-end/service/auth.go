@@ -105,8 +105,8 @@ func RefreshToken(ctx context.Context, refreshTokenStr string) (*TokenPair, erro
 	}
 	revoked, err := repository.IsTokenRevoked(ctx, claims.JTI)
 	if err != nil || revoked {
-		_ = repository.RevokeTokenAll(ctx, claims.UserId)
-		return nil, errors.New("Токен уже отозван. Все сессии завершены")
+		_ = repository.RevokeTokenByDevice(ctx, claims.UserId, claims.DeviceId)
+		return nil, errors.New("Токен уже отозван. Сессия завершена")
 	}
 	if err := repository.RevokeTokenByDevice(ctx, claims.UserId, claims.DeviceId); err != nil {
 		return nil, err
